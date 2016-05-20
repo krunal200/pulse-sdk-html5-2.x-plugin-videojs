@@ -130,4 +130,4 @@ The session settings object in the VideoJS plugin is a combination of contentMet
 * `linearSlotSize` : &lt;number>  Overrides the number of linear ads per slot. Using this affects the predictability of the Ooyala Pulse forecast functionality. Use with caution.
 
 # API Docs
-The full API docs are available in the [wiki](https://github.com/ooyala/pulse-sdk-html5-2.x-plugin-videojs/wiki/Pulse-VideoJS-plugin-API-documentation).
+The full API docs are available in the [wiki](https://github.com/ooyala/pulse-sdk-html5-2.x-plugin-videojs/wiki/API-Docs).

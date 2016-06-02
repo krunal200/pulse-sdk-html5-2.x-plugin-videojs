@@ -17,6 +17,7 @@
     controls 
     style="width: 1280px; height: 720px;">
 </video>
+<ol class="vjs-playlist"></ol>
 <script src="//service.videoplaza.tv/proxy/pulse-sdk-html5/2.1/latest.min.js"></script>
 <script src="//service.videoplaza.tv/proxy/pulse-sdk-html5-skin/base.min.js"></script>
 <script src="//players.brightcove.net/3110396001/HJcaydem_default/index.min.js"></script>
@@ -28,7 +29,7 @@
             var player = readyPlayers[id];
             player.ready(function() {
                 player.pulse({
-                    pulseHost : "http://pulse-demo.videoplaza.tv",
+                    pulseHost : 'http://pulse-demo.videoplaza.tv',
                     playerId: id,
                     metadata: {
                         tags: [ 'standard-linears' ],

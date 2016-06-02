@@ -17,6 +17,7 @@
         var prerollSlot = true;
         var contentPaused = false;
         var resizeHandle;
+        var sessionStarted = false;
 
         if(!OO || !OO.Pulse) {
             throw new Error('The Pulse SDK is not included in the page. Be sure to load it before the Brightcove player plugin.');
@@ -49,7 +50,6 @@
         });
 
         player.ready(function() {
-            //Inform videojs that the plugin is ready
             player.trigger('adsready');
             resetPlugin();
         });
@@ -150,7 +150,7 @@
                     for(var i = 0; i < mediaMetadata.cue_points.length; ++i) {
                         cuePoint = mediaMetadata.cue_points[i];
 
-                        if(cuePoint.name == 'vpspot') {
+                        if(cuePoint.type === 'AD' && (cuePoint.name === 'vpspot' || cuePoint.name === 'pulse_ad')) {
                             mediaCuePoints.push(cuePoint.time);
                         }
                     }
@@ -211,21 +211,25 @@
                 }
             }
 
-            console.log('- media metadata:');
-            console.log(mediaMetadata);
-            console.log('- page metadata:');
-            console.log(pageMetadata);
-            console.log('- final metadata:');
-            console.log(finalMetadata);
+            // translate page params like 'pulse_tags' -> sdk format 'tags'
+            // read query params for some things
+
+            /*
+                vpCategory: getParameterByName('category'),
+                contentPartner: getParameterByName('contentPartner'),
+                tags: getParameterByName('tags').split(','),
+            */
 
             return finalMetadata;
         }
 
         function resetPlugin() {
+            sessionStarted = false;
+
             //If there was an existing session, stop it
             player.pulse.stopSession();
             resetStates();
-            //Register the relevant event listeners on videojs
+            //Register the relevant event listeners
             registerPlayerEventListeners();
         }
 
@@ -236,27 +240,30 @@
             player.pulse.initSession(finalMetadata);
         }
 
-        //Volume change listener for videojs
+        //Volume change listener
         function onVolumeChange(){
             var volume = player.muted() ? 0 : player.volume();
             adPlayer.setVolume(volume);
         }
 
-        //fullscreen change listener for videojs
+        //fullscreen change listener
         function onSizeChanged(){
             adPlayer.resize(OO.Pulse.AdPlayer.Settings.SCALING.AUTO,
                 OO.Pulse.AdPlayer.Settings.SCALING.AUTO,
                 player.isFullscreen());
         }
 
-        //Get the HTML5 video element from videojs
+        //Get the HTML5 video element
         function getSharedElement(){
-            //The videoJS video element has the id playerId_html5_api
+            //The content video element has the id playerId_html5_api
             return document.getElementById(playerId + '_html5_api');
         }
 
         function readyForPreroll() {
-            console.log('readyForPreroll!');
+            if(sessionStarted) {
+                return;
+            }
+
             // Store content's metadata
             var mediaMetadata = player.mediainfo;
 
@@ -269,6 +276,7 @@
             // Init session with a combination of media and page level metadata
             doInitSession(mediaMetadata, pageMetadata);
             adPlayer.startSession(session, adPlayerListener);
+            sessionStarted = true;
         }
 
         //Time update callback for videojs
@@ -288,8 +296,9 @@
             adPlayer.contentStarted();
         }
 
-        //Register the relevant event listeners for videohs
+        //Register the relevant event listeners
         function registerPlayerEventListeners(){
+            // player.on('play', readyForPreroll);
             player.on('readyforpreroll',readyForPreroll);
             player.on('timeupdate', timeUpdate);
             player.on('contentended', contentEnded);
@@ -302,7 +311,8 @@
         }
 
         function unregisterPlayerEventListeners(){
-            player.off('readyforpreroll',readyForPreroll);
+            // player.off('play', readyForPreroll);
+            player.off('readyforpreroll', readyForPreroll);
             player.off('timeupdate', timeUpdate);
             player.off('contentended', contentEnded);
             player.off('contentplayback', contentPlayback);
@@ -475,8 +485,8 @@
                     sharedElement.style.display = "block";
                 }
 
-                //Restore the original src
-                player.src(playerSrc);
+                // Restore the original src
+                // player.src(playerSrc);
                 player.currentTime(0);
 
                 vjsControls.show();

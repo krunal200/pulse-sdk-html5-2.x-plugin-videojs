@@ -4,7 +4,6 @@
 
     var pulsePlugin = function(options, adClickedCallback){
         var player = this;
-        var playerId = options.playerId;
         var session = null;
         var pageMetadata = options.metadata || { };
         var vjsControls;
@@ -253,10 +252,9 @@
                 player.isFullscreen());
         }
 
-        //Get the HTML5 video element
+        // Get the HTML5 video element
         function getSharedElement(){
-            //The content video element has the id playerId_html5_api
-            return document.getElementById(playerId + '_html5_api');
+            return document.getElementById(player.id() + '_html5_api');
         }
 
         function readyForPreroll() {
@@ -432,7 +430,7 @@
          */
         function setPointerEventsForClick() {
             if(sharedElement){
-                document.getElementById(playerId).style.pointerEvents ="none";
+                document.getElementById(player.id()).style.pointerEvents ="none";
                 sharedElement.style.pointerEvents = "all";
             }
         }
@@ -443,7 +441,7 @@
          */
         function removePointerEventsForClick() {
             if(sharedElement){
-                document.getElementById(playerId).style.pointerEvents = "";
+                document.getElementById(player.id()).style.pointerEvents = "";
                 sharedElement.style.pointerEvents = "";
             }
         }

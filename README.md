@@ -16,7 +16,7 @@ The exact order in which these files need to be included has not yet been determ
 
 ## Initiate the plugin
 
-### Easy way _(not guaranteed to work 100% on mobile in this pre-release version_):
+### Easy way
 
 In your Videocloud player configuration, under _Name, Options (JSON)_, enter the name `pulse`, and then provide your Pulse hostname and optional page-level metadata in JSON format:
 ```
@@ -42,7 +42,6 @@ function loadPlayers() {
         player.ready(function() {
             player.pulse({
                 pulseHost: 'http://pulse-demo.videoplaza.tv',
-                playerId: id,
                 metadata: {
                     tags: [ 'standard-linears' ],
                     category: 'skip-always'

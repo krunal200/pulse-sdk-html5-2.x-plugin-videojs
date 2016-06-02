@@ -17,6 +17,7 @@
         var contentPaused = false;
         var resizeHandle;
         var sessionStarted = false;
+        var firstPlay = true;
 
         if(!OO || !OO.Pulse) {
             throw new Error('The Pulse SDK is not included in the page. Be sure to load it before the Brightcove player plugin.');
@@ -48,9 +49,15 @@
             }
         });
 
-        player.ready(function() {
-            player.trigger('adsready');
-            resetPlugin();
+        player.on('loadedmetadata', function() {
+            if(session === null) {
+                player.trigger('adsready');
+                resetPlugin();
+
+                if(!firstPlay) {
+                    player.controlBar.playToggle.trigger('click');                
+                }
+            }
         });
 
 
@@ -279,7 +286,9 @@
 
         //Time update callback for videojs
         function timeUpdate(){
-            adPlayer.contentPositionChanged(player.currentTime());
+            if(session) {
+                adPlayer.contentPositionChanged(player.currentTime());
+            }
         }
 
         //Content ended listener for videojs
@@ -291,7 +300,9 @@
 
         //Content playback listener for videojs
         function contentPlayback(event){
-            adPlayer.contentStarted();
+            if(session) {
+                adPlayer.contentStarted();
+            }
         }
 
         //Register the relevant event listeners
@@ -333,7 +344,9 @@
          */
         function openAndTrackClickThrough(url) {
             window.open(url);
-            adPlayer.adClickThroughOpened();
+            if(session) {
+                adPlayer.adClickThroughOpened();
+            }
         }
 
         //Detects if a mobile device is used. If that's the case the plugin will used a shared video
@@ -450,6 +463,7 @@
         //Ad player listener interface for the ad player
         var adPlayerListener = {
             startContentPlayback : function(){
+                firstPlay = false;
                 if(prerollSlot && !contentPaused){
                     player.trigger("nopreroll");
                 }
@@ -463,9 +477,9 @@
                 contentPaused = true;
                 player.pause();
                 vjsControls.hide();
-                if(!postrollsPlaying){
+                // if(!postrollsPlaying) {
                     player.ads.startLinearAdMode();
-                }
+                // }
                 setPointerEventsForClick();
                 isInLinearAdMode = true;
             },

@@ -37,7 +37,6 @@
         }
 
         adPlayer = OO.Pulse.createAdPlayer(adContainerDiv, null, sharedElement);
-
         adPlayer.addEventListener(OO.Pulse.AdPlayer.Events.AD_CLICKED, function(event, eventData){
 
             if(adClickedCallback){
@@ -51,16 +50,11 @@
 
         player.on('loadedmetadata', function() {
             if(session === null) {
-                console.log(player.ads.state);
                 player.trigger('adsready');
                 resetPlugin();
 
                 if(!firstPlay) {
-                    if(sharedElement) {
-
-                    } else {
-                        player.play();
-                    }
+                    player.play();
                 }
             }
         });

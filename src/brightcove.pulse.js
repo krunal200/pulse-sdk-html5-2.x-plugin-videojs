@@ -51,11 +51,16 @@
 
         player.on('loadedmetadata', function() {
             if(session === null) {
+                console.log(player.ads.state);
                 player.trigger('adsready');
                 resetPlugin();
 
                 if(!firstPlay) {
-                    player.controlBar.playToggle.trigger('click');                
+                    if(sharedElement) {
+
+                    } else {
+                        player.play();
+                    }
                 }
             }
         });
@@ -477,7 +482,7 @@
                 contentPaused = true;
                 player.pause();
                 vjsControls.hide();
-                // if(!postrollsPlaying) {
+                // if(sharedElement && !postrollsPlaying) {
                     player.ads.startLinearAdMode();
                 // }
                 setPointerEventsForClick();
@@ -491,8 +496,8 @@
             },
             sessionEnded: function(){
                 //Do not exit linear ad mode on mobile after postrolls or the content will restart
+                player.ads.endLinearAdMode();
                 if(!sharedElement){
-                    player.ads.endLinearAdMode();
                 } else {
                     sharedElement.style.display = "block";
                 }

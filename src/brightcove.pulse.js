@@ -24,7 +24,11 @@
         }
 
         //Init videojs-contrib-ads plugin
-        player.ads();
+        player.ads({
+            debug: true,
+            prerollTimeout: 5000
+        });
+
         //Set the Pulse global settings
         OO.Pulse.setPulseHost(options.pulseHost, options.deviceContainer, options.persistentId);
         //Create the ad player
@@ -48,15 +52,26 @@
             }
         });
 
-        player.on('loadedmetadata', function() {
+        var createSession = function() {
             if(session === null) {
-                player.trigger('adsready');
                 resetPlugin();
+                player.trigger('adsready');
 
                 if(!firstPlay) {
                     player.play();
                 }
             }
+        };
+
+        player.on('play', function() {
+            if(player.ads.state === 'ads-ready?') {
+                createSession();
+                player.trigger('play');
+            }
+        });
+
+        player.on('loadedmetadata', function() {
+            createSession();
         });
 
 
@@ -85,8 +100,9 @@
          * Start a pulse session
          * @param userSession
          */
-        player.pulse.startSession = function(userSession){
+        player.pulse.startSession = function(userSession) {
             adPlayer.startSession(userSession, adPlayerListener);
+            sessionStarted = true;
         };
 
         /**
@@ -121,7 +137,7 @@
          * Stop the ad session. No more ads will be displayed in the video.
          */
         player.pulse.stopSession = function () {
-            if(session){
+            if(sessionIsValid()) {
                 try{
                     adPlayer.stopSession();
                 } catch (e){
@@ -140,6 +156,10 @@
             player.pulse.stopSession();
             resetStates();
         };
+
+        function sessionIsValid() {
+            return !!session && !!session._currentSession;
+        }
 
         function mergeMetadata(mediaMetadata, pageMetadata) {
             var finalMetadata = { };
@@ -296,13 +316,12 @@
 
             // Init session with a combination of media and page level metadata
             doInitSession(mediaMetadata, pageMetadata);
-            adPlayer.startSession(session, adPlayerListener);
-            sessionStarted = true;
+            player.pulse.startSession(session);
         }
 
         //Time update callback for videojs
         function timeUpdate(){
-            if(session) {
+            if(sessionIsValid()) {
                 adPlayer.contentPositionChanged(player.currentTime());
             }
         }
@@ -316,14 +335,13 @@
 
         //Content playback listener for videojs
         function contentPlayback(event){
-            if(session) {
+            if(sessionIsValid()) {
                 adPlayer.contentStarted();
             }
         }
 
         //Register the relevant event listeners
         function registerPlayerEventListeners(){
-            // player.on('play', readyForPreroll);
             player.on('readyforpreroll',readyForPreroll);
             player.on('timeupdate', timeUpdate);
             player.on('contentended', contentEnded);
@@ -336,7 +354,6 @@
         }
 
         function unregisterPlayerEventListeners(){
-            // player.off('play', readyForPreroll);
             player.off('readyforpreroll', readyForPreroll);
             player.off('timeupdate', timeUpdate);
             player.off('contentended', contentEnded);
@@ -360,7 +377,7 @@
          */
         function openAndTrackClickThrough(url) {
             window.open(url);
-            if(session) {
+            if(sessionIsValid()) {
                 adPlayer.adClickThroughOpened();
             }
         }
@@ -440,7 +457,6 @@
         function initSession(contentMetadata, requestSettings) {
             session = OO.Pulse.createSession(contentMetadata, requestSettings);
         }
-
 
         /**
          * Create the ad container div for the Pulse ad player

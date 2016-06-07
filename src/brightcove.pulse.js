@@ -199,6 +199,23 @@
                 if(mediaMetadata.id) {
                     finalMetadata.id = mediaMetadata.id;
                 }
+
+                // Legacy: BC map metadata
+                if(mediaMetadata.vpBCMapTags) {
+                    finalMetadata.tags = mediaMetadata[mediaMetadata.vpBCMapTags].split(',');
+                }
+
+                if(mediaMetadata.vpBCMapFlags) {
+                    finalMetadata.flags = mediaMetadata[mediaMetadata.vpBCMapFlags].split(',');
+                }
+
+                if(mediaMetadata.vpBCMapCategory) {
+                    finalMetadata.category = mediaMetadata[mediaMetadata.vpBCMapCategory];
+                }
+
+                if(mediaMetadata.vpBCMapContentPartner) {
+                    finalMetadata.contentPartner = mediaMetadata[mediaMetadata.vpBCMapContentPartner];
+                }
             }
 
             // Player plugin config or page-level metadata

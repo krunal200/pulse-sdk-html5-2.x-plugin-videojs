@@ -509,8 +509,8 @@
                 contentPaused = true;
                 player.pause();
                 vjsControls.hide();
-                // if(sharedElement && !postrollsPlaying) {
-                    player.ads.startLinearAdMode();
+                // if(!sharedElement || !postrollsPlaying) {
+                player.ads.startLinearAdMode();
                 // }
                 setPointerEventsForClick();
                 isInLinearAdMode = true;
@@ -523,8 +523,8 @@
             },
             sessionEnded: function(){
                 //Do not exit linear ad mode on mobile after postrolls or the content will restart
-                player.ads.endLinearAdMode();
                 if(!sharedElement){
+                    player.ads.endLinearAdMode();
                 } else {
                     sharedElement.style.display = "block";
                 }

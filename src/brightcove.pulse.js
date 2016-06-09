@@ -550,6 +550,14 @@
                 removePointerEventsForClick();
                 //Reset the plugin state
                 resetStates();
+
+                // advance playlist if necessary
+                if(isMobile() && player.playlist) {
+                    var videoCount = player.playlist().length;
+                    if(player.playlist.currentItem() !== videoCount - 1) {
+                        player.playlist.currentItem(player.playlist.currentItem() + 1);
+                    }
+                }
             }
         }
     };

@@ -25,8 +25,8 @@
 
         //Init videojs-contrib-ads plugin
         player.ads({
-            debug: true,
-            prerollTimeout: 5000
+            debug: false,
+            prerollTimeout: 500
         });
 
         //Set the Pulse global settings
@@ -64,13 +64,16 @@
         };
 
         player.on('play', function() {
-            if(player.ads.state === 'ads-ready?') {
-                createSession();
-                player.trigger('play');
+            if(firstPlay) {
+                if(player.ads.state === 'ads-ready?') {
+                    createSession();
+                    player.trigger('play');
+                }                
             }
         });
 
         player.on('loadedmetadata', function() {
+            console.log('=> loadedmetadata, src: ' + player.src());
             createSession();
         });
 
@@ -290,9 +293,11 @@
 
         //fullscreen change listener
         function onSizeChanged(){
-            adPlayer.resize(OO.Pulse.AdPlayer.Settings.SCALING.AUTO,
+            adPlayer.resize(
                 OO.Pulse.AdPlayer.Settings.SCALING.AUTO,
-                player.isFullscreen());
+                OO.Pulse.AdPlayer.Settings.SCALING.AUTO,
+                player.isFullscreen()
+            );
         }
 
         // Get the HTML5 video element
@@ -397,7 +402,7 @@
         function cleanObject(obj){
             for (var prop in obj){
                 if(obj[prop] === null || obj[prop] === undefined){
-                    delete  obj[prop];
+                    delete obj[prop];
                 }
             }
         }
@@ -499,18 +504,24 @@
                 if(prerollSlot && !contentPaused){
                     player.trigger("nopreroll");
                 }
+
                 player.ads.endLinearAdMode();
+                if(!postrollsPlaying) {
+                    console.log('=> ending linear ad mode with state ' + player.ads.state);
+                    isInLinearAdMode = false;
+                }
+
                 vjsControls.show();
                 removePointerEventsForClick();
                 player.play();
-                isInLinearAdMode = false;
             },
             pauseContentPlayback : function(){
                 contentPaused = true;
                 player.pause();
                 vjsControls.hide();
                 // if(!sharedElement || !postrollsPlaying) {
-                player.ads.startLinearAdMode();
+                    console.log('=> (pause) starting linear ad mode with state ' + player.ads.state);
+                    player.ads.startLinearAdMode();
                 // }
                 setPointerEventsForClick();
                 isInLinearAdMode = true;
@@ -522,17 +533,18 @@
                 openAndTrackClickThrough(url);
             },
             sessionEnded: function(){
-                //Do not exit linear ad mode on mobile after postrolls or the content will restart
+                // Do not exit linear ad mode on mobile after postrolls or the content will restart
+                console.log('=> session ended; ending linear ad mode with state ' + player.ads.state);
+                player.ads.endLinearAdMode();
                 if(!sharedElement){
-                    player.ads.endLinearAdMode();
                 } else {
                     sharedElement.style.display = "block";
                 }
 
                 // Restore the original src
                 // player.src(playerSrc);
-                player.currentTime(0);
-
+                // player.currentTime(0);
+ 
                 vjsControls.show();
                 session = null;
                 removePointerEventsForClick();

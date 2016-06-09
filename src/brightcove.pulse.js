@@ -65,6 +65,7 @@
 
         player.on('play', function() {
             if(firstPlay) {
+                // workaround for desktop if the user clicks play before we get loadedmetadata
                 if(player.ads.state === 'ads-ready?') {
                     createSession();
                     player.trigger('play');
@@ -540,10 +541,6 @@
                 } else {
                     sharedElement.style.display = "block";
                 }
-
-                // Restore the original src
-                // player.src(playerSrc);
-                // player.currentTime(0);
  
                 vjsControls.show();
                 session = null;
@@ -551,7 +548,7 @@
                 //Reset the plugin state
                 resetStates();
 
-                // advance playlist if necessary, plus incorporate video replay hack
+                // if mobile: advance playlist if necessary, plus incorporate video replay hack
                 if(isMobile()) {
                     if(player.playlist) {
                         var videoCount = player.playlist().length;

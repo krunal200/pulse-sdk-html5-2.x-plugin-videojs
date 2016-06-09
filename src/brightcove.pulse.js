@@ -551,11 +551,17 @@
                 //Reset the plugin state
                 resetStates();
 
-                // advance playlist if necessary
-                if(isMobile() && player.playlist) {
-                    var videoCount = player.playlist().length;
-                    if(player.playlist.currentItem() !== videoCount - 1) {
-                        player.playlist.currentItem(player.playlist.currentItem() + 1);
+                // advance playlist if necessary, plus incorporate video replay hack
+                if(isMobile()) {
+                    if(player.playlist) {
+                        var videoCount = player.playlist().length;
+                        if(player.playlist.currentItem() !== videoCount - 1) {
+                            player.playlist.currentItem(player.playlist.currentItem() + 1);
+                        } else {
+                            player.currentTime(0);
+                        }
+                    } else {
+                        player.currentTime(0);
                     }
                 }
             }

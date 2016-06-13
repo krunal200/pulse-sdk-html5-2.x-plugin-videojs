@@ -3,7 +3,7 @@
  *
  * Common code to support ad integrations.
  */
-var vjcontribads = (function(window, videojs, undefined) {
+(function(window, videojs, undefined) {
 'use strict';
 
 var

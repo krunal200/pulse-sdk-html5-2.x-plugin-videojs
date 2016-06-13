@@ -21,9 +21,12 @@
 <script src="/plugin_html5_2.x/dist/pulse-sdk-html5-2.1.16.11.1.js"></script>
 <script src="//service.videoplaza.tv/proxy/pulse-sdk-html5-skin/base.js"></script>
 <script src="//players.brightcove.net/3110396001/HJcaydem_default/index.js"></script>
+    <script src="videojs-contrib-ads/videojs.ads.js"></script>
 <script src="../src/brightcove.pulse.js"></script>
 <script>
     function loadPlayers() {
+
+
         var readyPlayers = videojs.getPlayers();
         for(var id in readyPlayers) {
             var player = readyPlayers[id];
@@ -36,7 +39,7 @@
                     }
                 });
             });
-        }
+        }3
     }
 
     document.addEventListener("DOMContentLoaded", loadPlayers);

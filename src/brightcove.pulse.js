@@ -18,6 +18,7 @@
         var resizeHandle;
         var sessionStarted = false;
         var firstPlay = true;
+        var playlistCurrentItem = 0;
 
         if(!OO || !OO.Pulse) {
             throw new Error('The Pulse SDK is not included in the page. Be sure to load it before the Brightcove player plugin.');
@@ -54,12 +55,20 @@
 
         var createSession = function() {
             if(session === null) {
+                if(player.playlist){
+                    playlistCurrentItem = player.playlist.currentItem();
+                }
                 resetPlugin();
                 player.trigger('adsready');
 
                 if(!firstPlay) {
                     player.play();
                 }
+            } else if(player.playlist && playlistCurrentItem !== player.playlist.currentItem()){
+                //The video was changed, we need to stop the previous session
+                resetPlugin();
+                playlistCurrentItem = player.playlist.currentItem();
+                createSession();
             }
         };
 

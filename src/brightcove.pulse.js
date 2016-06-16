@@ -2,7 +2,7 @@
 (function(vjs){
     'use strict';
 
-    var pulsePlugin = function(options, adClickedCallback){
+    var pulsePlugin = function(options, readyForPrerollCallback, adClickedCallback){
         var player = this;
         var session = null;
         var pageMetadata = options.metadata || { };
@@ -25,11 +25,9 @@
         }
 
         //Init videojs-contrib-ads plugin
-        player.ads({
-            debug: false,
-            prerollTimeout: 500
-        });
+        player.ads(options['contrib-ads-options']);
 
+        OO.Pulse.debug = true;
         //Set the Pulse global settings
         OO.Pulse.setPulseHost(options.pulseHost, options.deviceContainer, options.persistentId);
         //Create the ad player
@@ -103,8 +101,8 @@
          * @returns {*}
          */
         player.pulse.initSession = function(sessionSettings){
-            initSession.call(this,getContentMetadataFromSessionSettings(sessionSettings),
-                getRequestSettingsFromSessionSettings(sessionSettings));
+            //resetPlugin();
+            pageMetadata = sessionSettings;
 
             return session;
         };
@@ -174,6 +172,7 @@
             return !!session && !!session._currentSession;
         }
 
+        //Merge the brightcove studio metadata with the page metadata
         function mergeMetadata(mediaMetadata, pageMetadata) {
             var finalMetadata = { };
 
@@ -292,7 +291,9 @@
             resetPlugin();
 
             var finalMetadata = mergeMetadata(mediaMetadata, pageMetadata);
-            player.pulse.initSession(finalMetadata);
+            initSession.call(this, getContentMetadataFromSessionSettings(finalMetadata),
+                getRequestSettingsFromSessionSettings(finalMetadata));
+            player.trigger('adsready');
         }
 
         //Volume change listener
@@ -324,14 +325,19 @@
             var mediaMetadata = player.mediainfo;
 
             // pause the player no matter what
-            player.pause();
+            //player.pause();
 
             // Save the player content
             playerSrc = player.currentSrc();
 
-            // Init session with a combination of media and page level metadata
-            doInitSession(mediaMetadata, pageMetadata);
-            player.pulse.startSession(session);
+            if(readyForPrerollCallback){
+                readyForPrerollCallback();
+            } else {
+                // Init session with a combination of media and page level metadata
+                doInitSession(mediaMetadata, pageMetadata);
+                player.pulse.startSession(session);
+            }
+
         }
 
         //Time update callback for videojs
@@ -455,7 +461,8 @@
                 nonlinearPlaybackPositions: sessionSettings.nonlinearPlaybackPositions,
                 insertionPointFilter: sessionSettings.insertionPointFilter,
                 referrerUrl: sessionSettings.referrerUrl,
-                linearSlotSize: sessionSettings.linearSlotSize
+                linearSlotSize: sessionSettings.linearSlotSize,
+                maxLinearBreakDuration: sessionSettings.maxLinearBreakDuration
             };
 
             //Remove the empty fields for the SDK
@@ -510,6 +517,9 @@
         //Ad player listener interface for the ad player
         var adPlayerListener = {
             startContentPlayback : function(){
+                if(sharedElement){
+                    sharedElement.style.display = 'block'; // Make sure the shared element is visible
+                }
                 firstPlay = false;
                 if(prerollSlot && !contentPaused){
                     player.trigger("nopreroll");
@@ -564,15 +574,15 @@
                         if(player.playlist.currentItem() !== videoCount - 1) {
                             player.playlist.currentItem(player.playlist.currentItem() + 1);
                         } else {
-                            player.currentTime(0);
+                           // player.currentTime(0);
                         }
                     } else {
-                        player.currentTime(0);
+                      //  player.currentTime(0);
                     }
                 }
             }
         }
     };
 
-    videojs.plugin('pulse', pulsePlugin);
+    vjs.plugin('pulse', pulsePlugin);
 })(window.videojs);

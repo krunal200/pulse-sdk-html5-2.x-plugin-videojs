@@ -72,6 +72,10 @@ In your player configuration in Brightcove Videocloud, under _Plugins, JavaScrip
 
 > The files can also be added to the page itself like for a standard videoJS integration.
 
+To configure your Pulse hostname and additional page-level metadata, there are two possible ways:
+
+### 1. Easy way (Brightove Studio):
+
 In your Videocloud player configuration, under _Name, Options (JSON)_, enter the name `pulse`, and then provide your Pulse hostname and optional page-level metadata in JSON format:
 ```
 {
@@ -83,6 +87,30 @@ In your Videocloud player configuration, under _Name, Options (JSON)_, enter the
 ```
 
 The plugin will be automatically initiated when your player loads. No additional code is needed on the client side.
+
+### 2. Page-level way:
+
+Listen for the player `ready` event and initialize the plugin there:
+```
+function loadPlayers() {
+  // Note that this has not been tested with multiple players
+    var readyPlayers = videojs.getPlayers();
+    for(var id in readyPlayers) {
+        var player = readyPlayers[id];
+        player.ready(function() {
+            player.pulse({
+                pulseHost: 'http://pulse-demo.videoplaza.tv',
+                metadata: {
+                    tags: [ 'standard-linears' ],
+                    category: 'skip-always'
+                }
+            });
+        });
+    }
+}
+
+document.addEventListener('DOMContentLoaded', loadPlayers);
+```
 
 #### Configure your metadata
 
@@ -184,30 +212,4 @@ The session settings object in the VideoJS plugin is a combination of contentMet
 
 ## API Docs
 The full API docs are available in the [wiki](https://github.com/ooyala/pulse-sdk-html5-2.x-plugin-videojs/wiki/API-Docs).
-
-
-
-### Page-level way:
-
-Listen for the player `ready` event and initialize the plugin there:
-```
-function loadPlayers() {
-	// Note that this has not been tested with multiple players
-    var readyPlayers = videojs.getPlayers();
-    for(var id in readyPlayers) {
-        var player = readyPlayers[id];
-        player.ready(function() {
-            player.pulse({
-                pulseHost: 'http://pulse-demo.videoplaza.tv',
-                metadata: {
-                    tags: [ 'standard-linears' ],
-                    category: 'skip-always'
-                }
-            });
-        });
-    }
-}
-
-document.addEventListener('DOMContentLoaded', loadPlayers);
-```
 

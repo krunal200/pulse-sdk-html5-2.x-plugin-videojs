@@ -324,9 +324,6 @@
             // Store content's metadata
             var mediaMetadata = player.mediainfo;
 
-            // pause the player no matter what
-            //player.pause();
-
             // Save the player content
             playerSrc = player.currentSrc();
 
@@ -573,11 +570,7 @@
                         var videoCount = player.playlist().length;
                         if(player.playlist.currentItem() !== videoCount - 1) {
                             player.playlist.currentItem(player.playlist.currentItem() + 1);
-                        } else {
-                           // player.currentTime(0);
                         }
-                    } else {
-                      //  player.currentTime(0);
                     }
                 }
             }

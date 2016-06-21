@@ -1,8 +1,5 @@
 # Ooyala Pulse plugin for VideoJS/Brightcove
 
-
-
-
 ### Introduction
 The VideoJS/Brightcove Pulse plugin makes it easy to create an integration between Ooyala Pulse for ad serving and your VideoJS/Brightcove player. The plugin is built on top of the Ooyala Pulse HTML5 ad player, which is part of [Ooyala's HTML5 Pulse SDK](http://pulse-sdks.ooyala.com/pulse-html5/latest/).
 
@@ -127,11 +124,10 @@ On your media items in Videocloud, the following custom metadata will be picked 
 Additionally, cue points of type _ad_, with a name of either `vpspot` or `pulse_spot` will be used to trigger midroll ads, and tags provided under the _Video Information_ section in Videocloud will be concatenated with `pulse_tags`.
 
 _*Full list of available flags:_
-- **nopre**: do not serve preroll ads
-- **nomid**: do not serve midroll ads
-- **nopost**: do not serve postroll ads
-- *..to be continued*
-
+- **noprerolls**: do not serve preroll ads
+- **nomidrolls**: do not serve midroll ads
+- **nopostrolls**: do not serve postroll ads
+- **nocom**: do not serve any ads
 
 ## Inserting a callback before ad session start
 

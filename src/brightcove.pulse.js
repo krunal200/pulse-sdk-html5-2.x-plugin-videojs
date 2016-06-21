@@ -27,7 +27,7 @@
         //Init videojs-contrib-ads plugin
         player.ads(options['contrib-ads-options']);
 
-        OO.Pulse.debug = true;
+        OO.Pulse.debug = options.debug || false;
         //Set the Pulse global settings
         OO.Pulse.setPulseHost(options.pulseHost, options.deviceContainer, options.persistentId);
         //Create the ad player
@@ -76,12 +76,12 @@
                 if(player.ads.state === 'ads-ready?') {
                     createSession();
                     player.trigger('play');
-                }                
+                }
             }
         });
 
         player.on('loadedmetadata', function() {
-            console.log('=> loadedmetadata, src: ' + player.src());
+            OO.Pulse.Utils.log('=> loadedmetadata, src: ' + player.src());
             createSession();
         });
 
@@ -201,7 +201,7 @@
                 if(pulseTags) {
                     finalMetadata.tags = pulseTags.split(',');
                 }
-                
+
                 var pulseFlags = mediaMetadata.custom_fields.pulse_flags || mediaMetadata.custom_fields.vpFlags;
                 if(pulseFlags) {
                     finalMetadata.flags = pulseFlags.split(',');
@@ -527,7 +527,7 @@
 
                 player.ads.endLinearAdMode();
                 if(!postrollsPlaying) {
-                    console.log('=> ending linear ad mode with state ' + player.ads.state);
+                    OO.Pulse.Utils.log('=> ending linear ad mode with state ' + player.ads.state);
                     isInLinearAdMode = false;
                 }
 
@@ -540,7 +540,7 @@
                 player.pause();
                 vjsControls.hide();
                 // if(!sharedElement || !postrollsPlaying) {
-                    console.log('=> (pause) starting linear ad mode with state ' + player.ads.state);
+                    OO.Pulse.Utils.log('=> (pause) starting linear ad mode with state ' + player.ads.state);
                     player.ads.startLinearAdMode();
                 // }
                 setPointerEventsForClick();
@@ -554,13 +554,13 @@
             },
             sessionEnded: function(){
                 // Do not exit linear ad mode on mobile after postrolls or the content will restart
-                console.log('=> session ended; ending linear ad mode with state ' + player.ads.state);
+                OO.Pulse.Utils.log('=> session ended; ending linear ad mode with state ' + player.ads.state);
                 player.ads.endLinearAdMode();
                 if(!sharedElement){
                 } else {
                     sharedElement.style.display = "block";
                 }
- 
+
                 vjsControls.show();
                 session = null;
                 removePointerEventsForClick();

@@ -148,8 +148,8 @@ The plugin options object in the VideoJS plugin is a combination of Pulse global
 * `pulseHost` : Full hostname of the Ooyala Pulse account to use.
 * `deviceContainer` : Ooyala Pulse device container. It is recommended to set this parameter to `null`.
 * `persistentId` : Ooyala Pulse persistent id; used for unique user tracking.
-* `contrib-ads-options` : parameters to pass to the videojs-contrib-ads plugin, see [videojs-contrib-ads](https://github.com/videojs/videojs-contrib-ads) for more information.
-* `playerId` : player div id. This parameter is MANDATORY.
+* `contrib-ads-options` : Parameters to pass to the videojs-contrib-ads plugin, see [videojs-contrib-ads](https://github.com/videojs/videojs-contrib-ads) for more information.
+* `debug` : If true, the plugin and Pulse SDK will output debug info to the console
 
 
 ## <a name="session-settings"></a>Session settings

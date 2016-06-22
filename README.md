@@ -117,7 +117,7 @@ On your media items in Videocloud, the following custom metadata will be picked 
 | Name       	| Legacy name 	| Sample input                     	| Description                      	|
 |------------	|-------------	|----------------------------------	|----------------------------------	|
 | pulse_tags    | vpTags       	| sports,soccer,europe            	| Matched against tag targeting rules set up in Pulse; comma separated.  	|
-| pulse_flags	| vpFlags      	| nopre,nocom*                   	| Prevents certain ad types from being served; comma separated.|
+| pulse_flags	| vpFlags      	| noprerolls,nocom*                   	| Prevents certain ad types from being served; comma separated.|
 | pulse_category| vpCategory   	| sports                         	| Selects alternate ad insertion policies configured in Pulse.	|
 | pulse_content_partner| vpContentPartner|                          |                                  	|
 | pulse_content_form| vpContentForm	| short _or_ long               | Selects ad insertion policies configured in Pulse for short/long form content.	|

@@ -54,9 +54,13 @@ The VideoJS/Brightcove Pulse plugin makes it easy to create an integration betwe
 1. Use `initSession` to initialize a new ad session and associate ads with the content selected for playback by the viewer. The session settings to pass in include the tags and categories of your ads. (See the [Session Settings](#session-settings) section for more information about each parameter).
   ```
   myVideoJSPlayer.pulse.initSession(sessionSettings);
-  ``
+  ```
   
 ### Brightcove integration
+
+To configure your Pulse hostname and additional page- or player-level metadata, there are two possible ways:
+
+### 1. Easy way (Brightove Studio):
 
 In your player configuration in Brightcove Videocloud, under _Plugins, JavaScript_, include the following source files in addition to your Brightcove embed code:
 
@@ -69,9 +73,6 @@ In your player configuration in Brightcove Videocloud, under _Plugins, JavaScrip
 
 > The files can also be added to the page itself like for a standard videoJS integration.
 
-To configure your Pulse hostname and additional page-level metadata, there are two possible ways:
-
-### 1. Easy way (Brightove Studio):
 
 In your Videocloud player configuration, under _Name, Options (JSON)_, enter the name `pulse`, and then provide your Pulse hostname and optional page-level metadata in JSON format:
 ```
@@ -183,7 +184,7 @@ The session settings object in the VideoJS plugin is a combination of contentMet
 * `category` : &lt;string\> Content category is used by Ooyala Pulse to target ads and determine
     the ad insertion policy. The content category is represented by either its unique id or one
     of its aliases set in Ooyala Pulse.
-* `contentForm` : &lt;[OO.adrequest.AdRequester.ContentForm](http://pulse-sdks.ooyala.com/html5_2/latest/videoplaza.adrequest.AdRequester.html#toc4__anchor)>  Content form is used to determine the ad insertion policy.
+* `contentForm` : &lt;[OO.Pulse.ContentForm](http://pulse-sdks.ooyala.com/pulse-html5/latest/OO.Pulse.html#.ContentForm)>  Content form is used to determine the ad insertion policy.
 * `id` : &lt;string>  Ooyala Pulse content id. Id is used to identify the content to third parties.
 * `contentPartner`: &lt;string>  Ooyala Pulse content partner. Content partners can be used by
     Ooyala Pulse to target ads. The content partner is represented by either its unique id or one of its
@@ -201,7 +202,7 @@ The session settings object in the VideoJS plugin is a combination of contentMet
 * `maxBitRate` : &lt;number>  The maximum bitrate of the media files in the ad response.
 * `linearPlaybackPositions` : &lt;number[]> An array of numbers which defines at what points in time linear ads should be shown.
 * `nonlinearPlaybackPositions`: &lt;number[]>  An array of numbers which defines at what points in time non-linear ads should be shown.
-* `insertionPointFilter` : &lt;[OO.adrequest.AdRequester.InsertionPointType](http://pulse-sdks.ooyala.com/html5_2/latest/videoplaza.adrequest.AdRequester.html#toc5__anchor)>  If not set, the request is for every kind of insertion point. If set, only the types provided are requested. See [link](http://pulse-sdks.ooyala.com/html5_2/latest/videoplaza.adrequest.AdRequester.html#toc5__anchor) for possible values.
+* `insertionPointFilter` : &lt;[OO.Pulse.InsertionPointType](http://pulse-sdks.ooyala.com/pulse-html5/latest/OO.Pulse.html#.InsertionPointType)>  If not set, the request is for every kind of insertion point. If set, only the types provided are requested.
 * `width` : &lt;number>  Width in pixels of the video area where ads should be shown.
 * `referrerUrl` : &lt;string>  Overrides the HTTP header's referrer property.
 * `linearSlotSize` : &lt;number>  Overrides the number of linear ads per slot. Using this affects the predictability of the Ooyala Pulse forecast functionality. Use with caution.

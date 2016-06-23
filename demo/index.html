@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Brightcove Pulse ad player bridge</title>
+    <!-- <link rel="stylesheet" href="../../plugin_html5_2.x_adplayer_skins/base/css/skin.css"> -->
+    <!-- <script src="../../plugin_html5_2.x_adplayer_skins/base/js/skin.js"></script> -->
+</head>
+
+<body>
+<div id="main">
+<video
+    data-playlist-id="4901749008001" 
+    data-account="3110396001" 
+    data-player="HJcaydem" 
+    data-embed="default" 
+    class="video-js" 
+    controls 
+    style="width: 1280px; height: 720px;">
+</video>
+<ol class="vjs-playlist"></ol>
+<script src="/plugin_html5_2.x/dist/pulse-sdk-html5-2.1.16.12.0.js"></script>
+<script src="//service.videoplaza.tv/proxy/pulse-sdk-html5-skin/base.js"></script>
+<script src="//players.brightcove.net/3110396001/HJcaydem_default/index.js"></script>
+    <script src="videojs-contrib-ads/videojs.ads.js"></script>
+<script src="../src/brightcove.pulse.js"></script>
+<script>
+    function loadPlayers() {
+
+
+        var readyPlayers = videojs.getPlayers();
+        for(var id in readyPlayers) {
+            var player = readyPlayers[id];
+            player.ready(function() {
+                player.pulse({
+                    pulseHost : 'http://pulse-demo.videoplaza.tv',
+                    metadata: {
+                        tags: [ 'standard-linears' ],
+                        // contentForm: 'hello'
+                    },
+                    debug: true
+                });
+            });
+        }3
+    }
+
+    document.addEventListener("DOMContentLoaded", loadPlayers);
+</script>
+</div>
+</div>
+</body>
+</html>

@@ -1,5 +1,5 @@
-### Version 1.0 - June 22, 2016
+### Version 1.1 - June 23, 2016
 
-First version of the Ooyala Pulse HTML5 plugin for Brightcove & VideoJS.
+First version of the Ooyala Pulse HTML5 plugin for VideoJS with support for metadata from Brightcove Studio.
 
 <br><hr/>

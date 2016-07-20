@@ -19,6 +19,7 @@
         var sessionStarted = false;
         var firstPlay = true;
         var playlistCurrentItem = 0;
+        var pauseAdTimeout = null;
 
         if(!OO || !OO.Pulse) {
             throw new Error('The Pulse SDK is not included in the page. Be sure to load it before the Brightcove player plugin.');
@@ -40,12 +41,17 @@
         }
 
         adPlayer = OO.Pulse.createAdPlayer(adContainerDiv, null, sharedElement);
-        adPlayer.addEventListener(OO.Pulse.AdPlayer.Events.AD_CLICKED, function(event, eventData){
+        
+        adPlayer.addEventListener(OO.Pulse.AdPlayer.Events.PAUSE_AD_SHOWN, function (event, metadata) {
+            // Make sure that the videojs control are  visible for pause ads
+            vjsControls.el().style['z-index'] = 10000;
+        });
 
+        adPlayer.addEventListener(OO.Pulse.AdPlayer.Events.AD_CLICKED, function(event, eventData) {
             if(adClickedCallback){
                 adClickedCallback(eventData);
             } else {
-                //Default clickthrough behaviour
+                // Default clickthrough behaviour
                 adPlayer.pause();
                 openAndTrackClickThrough(eventData.url);
             }
@@ -77,6 +83,19 @@
                     createSession();
                     player.trigger('play');
                 }
+            } else {
+                delete vjsControls.el().style['z-index'];
+                adPlayer.contentStarted();
+            }
+        });
+
+        player.on('pause', function () {
+            if(!player.scrubbing() && player.ads.state === 'content-playback') {
+                pauseAdTimeout = setTimeout(function() {
+                    console.log('=> Trying to show pause ad');
+                    pauseAdTimeout = null;
+                    adPlayer.contentPaused();
+                }, 100);
             }
         });
 
@@ -346,6 +365,13 @@
 
         //Content ended listener for videojs
         function contentEnded(){
+            console.log('=> contentEnded');
+            if(pauseAdTimeout) {
+                console.log('=> Canceling pause ad request');
+                clearTimeout(pauseAdTimeout);
+                pauseAdTimeout = null;
+            }
+
             postrollsPlaying = true;
             unregisterPlayerEventListeners();
             adPlayer.contentFinished();

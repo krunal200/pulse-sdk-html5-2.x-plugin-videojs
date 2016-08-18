@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ooyala Pulse plugin for videojs/Brightcove demo</title>
+</head>
+
+<body>
+<div id="main">
+    <video
+            data-playlist-id="4901749008001"
+            data-account="3110396001"
+            data-player="HJcaydem"
+            data-embed="default"
+            class="video-js"
+            controls
+            style="width: 1280px; height: 720px;">
+    </video>
+    <ol class="vjs-playlist"></ol>
+    <!--Include the pulse SDK-->
+    <script src="//service.videoplaza.tv/proxy/pulse-sdk-html5/2.1/latest.min.js"></script>
+    <!--Include the pulse SDK ad player skin if you need it.-->
+    <script src="//service.videoplaza.tv/proxy/pulse-sdk-html5-skin/base.min.js"></script>
+    <!--Include here the brightcove player.-->
+    <script src="//players.brightcove.net/3110396001/HJcaydem_default/index.js"></script>
+    <!--Include your plugins here. This step can be skipped if you already included the plugin directly in your Brightcove player in brightcove studio.-->
+    <script src="videojs-contrib-ads/videojs.ads.js"></script>
+    <script src="../src/brightcove.pulse.js"></script>
+    <script>
+
+        function loadPlayers() {
+            var readyPlayers = videojs.getPlayers();
+            for(var id in readyPlayers) {
+                var player = readyPlayers[id];
+                player.ready(function() {
+                    player.pulse({
+                        pulseHost : 'http://pulse-demo.videoplaza.tv',
+                        metadata: {
+                            tags: [ 'standard-linears', 'pause' ],
+                            category: 'skip-always',
+                            linearPlaybackPositions: [ 20, 50 ]
+                        },
+                        'contrib-ads-options': {
+                            debug: true
+                        },
+                        debug: true
+                    });
+                });
+            }3
+        }
+
+        document.addEventListener("DOMContentLoaded", loadPlayers);
+    </script>
+</div>
+</div>
+</body>
+</html>

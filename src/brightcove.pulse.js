@@ -66,6 +66,9 @@
                 player.trigger('adsready');
 
                 if(!firstPlay) {
+                    //Workaround to avoid contrib-ads to force restart the video. Probably a bug in contrib-ads
+                    player.clearTimeout(player.ads.tryToResumeTimeout_);
+                    player.ads.tryToResumeTimeout_ = null;
                     player.play();
                 }
             } else if(player.playlist && playlistCurrentItem !== player.playlist.currentItem()){

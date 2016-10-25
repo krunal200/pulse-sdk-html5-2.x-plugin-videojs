@@ -50,7 +50,7 @@
         adPlayer.addEventListener(OO.Pulse.AdPlayer.Events.AD_CLICKED, function(event, eventData) {
             if(adClickedCallback){
                 adClickedCallback(eventData);
-            } else {
+            } else if (eventData.url) {
                 // Default clickthrough behaviour
                 adPlayer.pause();
                 openAndTrackClickThrough(eventData.url);

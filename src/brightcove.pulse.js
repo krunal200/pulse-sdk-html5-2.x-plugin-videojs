@@ -343,6 +343,9 @@
                 return;
             }
 
+            player.ads.startLinearAdMode();
+            isInLinearAdMode = true;
+            
             // Store content's metadata
             var mediaMetadata = player.mediainfo;
 
@@ -565,10 +568,10 @@
                 contentPaused = true;
                 player.pause();
                 vjsControls.hide();
-                // if(!sharedElement || !postrollsPlaying) {
-                    OO.Pulse.Utils.log('=> (pause) starting linear ad mode with state ' + player.ads.state);
-                    player.ads.startLinearAdMode();
-                // }
+
+                OO.Pulse.Utils.log('=> (pause) starting linear ad mode with state ' + player.ads.state);
+                player.ads.startLinearAdMode();
+
                 setPointerEventsForClick();
                 isInLinearAdMode = true;
             },

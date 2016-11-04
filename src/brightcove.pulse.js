@@ -41,6 +41,13 @@
         }
 
         adPlayer = OO.Pulse.createAdPlayer(adContainerDiv, null, sharedElement);
+        //Hide the videojs spinner when ads are playing
+        (function(){
+            var style = document.createElement('style');
+            style.type = 'text/css';
+            style.innerHTML = '.vjs-ad-playing.vjs-ad-playing .vjs-loading-spinner{display:none}';
+            document.getElementsByTagName('head')[0].appendChild(style);
+        }());
         
         adPlayer.addEventListener(OO.Pulse.AdPlayer.Events.PAUSE_AD_SHOWN, function (event, metadata) {
             // Make sure that the videojs control are  visible for pause ads
@@ -56,6 +63,17 @@
                 openAndTrackClickThrough(eventData.url);
             }
         });
+
+        adPlayer.addEventListener(OO.Pulse.AdPlayer.Events.AD_BREAK_STARTED, function () {
+            player.trigger('playing');
+            //Hide the VJS loading spinner
+            var spinners = document.getElementsByClassName('vjs-loading-spinner');
+            for (var i = 0; i < spinners.length; i++){
+                spinners[i].style.display = "none";
+            }
+
+        });
+
 
         var createSession = function() {
             if(session === null) {
@@ -116,6 +134,12 @@
          * Pulse ad player
          */
         player.pulse.adPlayer = adPlayer;
+
+        /**
+         * Pulse plugin version
+         */
+
+        player.pulse.version = "@VERSION";
 
         /**
          * Initialize a new session.
@@ -395,7 +419,7 @@
             player.on('readyforpreroll',readyForPreroll);
             player.on('timeupdate', timeUpdate);
             player.on('contentended', contentEnded);
-            player.on('contentplayback', contentPlayback);
+            player.on('playing', contentPlayback);
             player.on('fullscreenchange', onSizeChanged);
             player.on('volumechange', onVolumeChange);
 

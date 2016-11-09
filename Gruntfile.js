@@ -10,15 +10,31 @@ module.exports = function(grunt) {
     // Load the plugin tasks we need
     [
         "grunt-contrib-uglify",
+        "grunt-contrib-clean",
         "grunt-contrib-copy",
+        "grunt-contrib-concat",
     ].forEach(grunt.loadNpmTasks);
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+        clean: {
+            skin: {
+                src: ['dist/']
+            }
+        },
+        concat: {
+            pulse: {
+                options: {
+                    process: function(source, filepath) {
+                        console.log(filepath);
+                        if (filepath.indexOf('brightcove.pulse.js') > -1) {
+                            return source.replace('@VERSION', grunt.template.process('<%= pkg.version %>'));
+                        }
 
-        //Copy the JS to dist
-        copy: {
-            bridge: {
+                        return source;
+                    },
+                    banner: sourceBanner
+                },
                 src: 'src/*.js',
                 dest: 'dist/<%= pkg.name %>-<%= pkg.version %>.js'
             }
@@ -27,17 +43,17 @@ module.exports = function(grunt) {
         uglify: {
             bridge: {
                 options: {
-                    banner: sourceBanner,
+                    //banner: sourceBanner,
                     mangle: {
                         except: ['error', 'format', 'request', 'model', 'parse', 'core', 'window', 'document', 'console']
                     }
                 },
                 files: {
-                    'dist/<%= pkg.name %>-<%= pkg.version %>.min.js': ['<%= copy.bridge.dest %>' ]
+                    'dist/<%= pkg.name %>-<%= pkg.version %>.min.js': ['dist/<%= pkg.name %>-<%= pkg.version %>.js' ]
                 }
             },
         },
     });
 
-    grunt.registerTask('default', ['copy', 'uglify',]);
+    grunt.registerTask('default', [ 'concat', 'uglify',]);
 };

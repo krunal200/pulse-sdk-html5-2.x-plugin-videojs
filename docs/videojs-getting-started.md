@@ -23,7 +23,7 @@
   ```
   or
   ```
-  <script type="text/javascript" src="https://service.videoplaza.tv/proxy/pulse-sdk-html5-bridges/videojs/latest.min.js"></script>
+  <script type="text/javascript" src="https://service.videoplaza.tv/proxy/pulse-sdk-html5-bridges/videojs/2/latest.min.js"></script>
   ```
 
 1. Optionally, load the Pulse ad player skin  on the page with your VideoJS player, to show a default skin containing control buttons for the ad player.

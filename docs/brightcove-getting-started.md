@@ -13,8 +13,8 @@ To get started with the integration and configure your Pulse hostname and additi
 1. In the next page, click _JavaScript_ and include the following source files in addition to your Brightcove embed code:
   - https://service.videoplaza.tv/proxy/pulse-sdk-html5/2.1/latest.min.js - _The Pulse SDK_
   - https://service.videoplaza.tv/proxy/pulse-sdk-html5-skin/base.min.js - _The Pulse SDK AdPlayer skin (if desired)_
-  - https://service.videoplaza.tv/proxy/pulse-sdk-html5-bridges/videojs/latest.min.js - _The Pulse plugin for the Brightcove video player_
-  - videojs.ads.js - _The videojs ad manager plugin, available on [GitHub](https://github.com/videojs/videojs-contrib-ads)_, which you need to host yourself.
+  - https://service.videoplaza.tv/proxy/pulse-sdk-html5-bridges/videojs/2/latest.min.js - _The Pulse plugin for the Brightcove video player_
+  - videojs.ads.js - _The videojs ad manager plugin, available on [GitHub](https://github.com/videojs/videojs-contrib-ads)_, which you need to host yourself (Our plugin v2 should be used with contrib-ads v4.x).
 
   **https** may be substituted for **http** if required, or omitted (like `//url.to.file`) to automatically use the protocol of the current site.
 

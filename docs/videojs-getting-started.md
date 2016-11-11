@@ -8,6 +8,8 @@
  <script type="text/javascript" src="http://service.videoplaza.tv/proxy/pulse-sdk-html5/2.1/latest.min.js"></script>
  ```
  >:bulb: You can download and host this javascript library yourself, but it is recommended to load it from the described location to get all bug fixes and latest versions automatically.
+ 
+1. Load the VideoJS contrib-ads plugin available on [GitHub](https://github.com/videojs/videojs-contrib-ads).
 
 1. Load the Pulse VideoJS plugin after the HTML5 Pulse SDK on the page with your VideoJS player. You have three options:
   - Use the videojs.pulse.js file in the src folder directly,

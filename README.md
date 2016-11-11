@@ -24,11 +24,8 @@ Information about each of the plugin options and session settings can be found o
 
 Information about further customizations you can make to the integration can be found on [Customizing Your VideoJS or Brightcove Player Integration](docs/player-customization.md)
 
-## Migrating to v2
+## Videojs contrib-ads compatibility table
 
-Versions 2+ of the plugins support videojs-contrib-ads v4. There are no breaking changes in the API.
-
-## Compatibility table
 
 |                | Pulse plugin v1 | Pulse plugin v2 |
 |----------------|:---------------:|:---------------:|

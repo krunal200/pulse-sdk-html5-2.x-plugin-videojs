@@ -48,7 +48,7 @@
             style.innerHTML = '.vjs-ad-playing.vjs-ad-playing .vjs-loading-spinner{display:none}';
             document.getElementsByTagName('head')[0].appendChild(style);
         }());
-        
+
         adPlayer.addEventListener(OO.Pulse.AdPlayer.Events.PAUSE_AD_SHOWN, function (event, metadata) {
             // Make sure that the videojs control are  visible for pause ads
             vjsControls.el().style['z-index'] = 10000;
@@ -242,38 +242,41 @@
                         finalMetadata.linearPlaybackPositions = mediaCuePoints;
                     }
                 }
+                if(mediaMetadata.custom_fields) {
 
-                var pulseTags = mediaMetadata.custom_fields.pulse_tags || mediaMetadata.custom_fields.vpTags;
-                if(pulseTags) {
-                    finalMetadata.tags = pulseTags.split(',');
+
+                    var pulseTags = mediaMetadata.custom_fields.pulse_tags || mediaMetadata.custom_fields.vpTags;
+                    if (pulseTags) {
+                        finalMetadata.tags = pulseTags.split(',');
+                    }
+
+                    var pulseFlags = mediaMetadata.custom_fields.pulse_flags || mediaMetadata.custom_fields.vpFlags;
+                    if (pulseFlags) {
+                        finalMetadata.flags = pulseFlags.split(',');
+                    }
+
+                    // TODO: reinit session if this is present or what?
+                    var pulseHost = mediaMetadata.custom_fields.pulse_host || mediaMetadata.custom_fields.vpHost;
+                    if (pulseHost) {
+                        finalMetadata.pulseHost = pulseHost;
+                    }
+
+                    var pulseCategory = mediaMetadata.custom_fields.pulse_category || mediaMetadata.custom_fields.vpCategory;
+                    if (pulseCategory) {
+                        finalMetadata.category = pulseCategory;
+                    }
+
+                    var pulseContentPartner = mediaMetadata.custom_fields.pulse_content_partner || mediaMetadata.custom_fields.vpContentPartner;
+                    if (pulseContentPartner) {
+                        finalMetadata.contentPartner = pulseContentPartner;
+                    }
+
+                    var pulseContentForm = mediaMetadata.custom_fields.pulse_content_form || mediaMetadata.custom_fields.vpContentForm;
+                    if (pulseContentForm) {
+                        finalMetadata.contentForm = pulseContentForm;
+                    }
+
                 }
-
-                var pulseFlags = mediaMetadata.custom_fields.pulse_flags || mediaMetadata.custom_fields.vpFlags;
-                if(pulseFlags) {
-                    finalMetadata.flags = pulseFlags.split(',');
-                }
-
-                // TODO: reinit session if this is present or what?
-                var pulseHost = mediaMetadata.custom_fields.pulse_host || mediaMetadata.custom_fields.vpHost;
-                if(pulseHost) {
-                    finalMetadata.pulseHost = pulseHost;
-                }
-
-                var pulseCategory = mediaMetadata.custom_fields.pulse_category || mediaMetadata.custom_fields.vpCategory;
-                if(pulseCategory) {
-                    finalMetadata.category = pulseCategory;
-                }
-
-                var pulseContentPartner = mediaMetadata.custom_fields.pulse_content_partner || mediaMetadata.custom_fields.vpContentPartner;
-                if(pulseContentPartner) {
-                    finalMetadata.contentPartner = pulseContentPartner;
-                }
-
-                var pulseContentForm = mediaMetadata.custom_fields.pulse_content_form || mediaMetadata.custom_fields.vpContentForm;
-                if(pulseContentForm) {
-                    finalMetadata.contentForm = pulseContentForm;
-                }
-
                 if(mediaMetadata.id) {
                     finalMetadata.id = mediaMetadata.id;
                 }
@@ -315,10 +318,10 @@
             // read query params for some things
 
             /*
-                vpCategory: getParameterByName('category'),
-                contentPartner: getParameterByName('contentPartner'),
-                tags: getParameterByName('tags').split(','),
-            */
+             vpCategory: getParameterByName('category'),
+             contentPartner: getParameterByName('contentPartner'),
+             tags: getParameterByName('tags').split(','),
+             */
 
             return finalMetadata;
         }
@@ -369,7 +372,7 @@
 
             player.ads.startLinearAdMode();
             isInLinearAdMode = true;
-            
+
             // Store content's metadata
             var mediaMetadata = player.mediainfo;
 

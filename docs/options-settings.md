@@ -25,6 +25,7 @@ The session settings object is a combination of contentMetadata and requestSetti
 * `customParameters`: &lt;object>  The custom parameters to add to the session request. Parameters with names containing invalid characters are omitted. These custom parameters are added to the ad server request URL in the style of "cp.[parameter_name]=[parameter_value]".
 * `height` : &lt;number>  Height in pixels of the video area where ads should be shown.
 * `maxBitRate` : &lt;number>  The maximum bitrate of the media files in the ad response.
+* `maxLinearBreakDuration` : &lt;number>  The maximum length (in seconds) of linear ad breaks.
 * `linearPlaybackPositions` : &lt;number[]> An array of numbers which defines at what points in time linear ads should be shown.
 * `nonlinearPlaybackPositions`: &lt;number[]>  An array of numbers which defines at what points in time non-linear ads should be shown.
 * `insertionPointFilter` : &lt;[OO.Pulse.InsertionPointType](http://pulse-sdks.ooyala.com/pulse-html5/latest/OO.Pulse.html#.InsertionPointType)>  If not set, the request is for every kind of insertion point. If set, only the types provided are requested.

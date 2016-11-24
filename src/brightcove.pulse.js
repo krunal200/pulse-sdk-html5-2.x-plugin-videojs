@@ -276,6 +276,11 @@
                         finalMetadata.contentForm = pulseContentForm;
                     }
 
+                    var pulseMaxLinearBreakDuration = parseInt(mediaMetadata.custom_fields.pulse_max_linear_break_duration);
+                    if (pulseMaxLinearBreakDuration && !isNaN(pulseMaxLinearBreakDuration)) {
+                        finalMetadata.maxLinearBreakDuration = pulseMaxLinearBreakDuration;
+                    }
+
                 }
                 if(mediaMetadata.id) {
                     finalMetadata.id = mediaMetadata.id;

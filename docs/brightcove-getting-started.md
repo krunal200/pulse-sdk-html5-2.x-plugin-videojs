@@ -70,6 +70,7 @@ On your video items in Brightcove Studio, the following custom metadata is read 
 |------------	|-------------	|----------------------------------	|----------------------------------	|
 | pulse_tags    | vpTags       	| sports,soccer,europe            	| Matched against tag targeting rules set up in Pulse; comma separated.  	|
 | pulse_flags	| vpFlags      	| noprerolls,nocom*                   	| Prevents certain ad types from being served; comma separated.|
+| pulse_max_linear_break_duration	| none      	| 15                	| Maximum linear ad break duration in seconds.|
 | pulse_category| vpCategory   	| sports                         	| Selects alternate ad insertion policies configured in Pulse.	|
 | pulse_content_partner| vpContentPartner|                          |                                  	|
 | pulse_content_form| vpContentForm	| shortForm _or_ longForm               | Selects ad insertion policies configured in Pulse for short/long form content.	|

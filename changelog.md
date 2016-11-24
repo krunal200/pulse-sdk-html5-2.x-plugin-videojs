@@ -1,3 +1,8 @@
+### Version 2.0.2 - November xx, 2016
+
+Added support for the pulse_max_linear_break_duration parameter in Brightcove Studio
+
+<br><hr/>
 ### Version 2.0.1 - November 17, 2016
 
 Fix a bug where not having custom fields on a Brightcove studio asset could crash the plugin metadata parsing logic.

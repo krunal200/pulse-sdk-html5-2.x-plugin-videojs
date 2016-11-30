@@ -28,6 +28,10 @@
         //Init videojs-contrib-ads plugin
         player.ads(options['contrib-ads-options']);
 
+        if(options.hidePoster) {
+            player.addClass('vjs-pulse-hideposter');
+        }
+
         OO.Pulse.debug = options.debug || false;
         //Set the Pulse global settings
         OO.Pulse.setPulseHost(options.pulseHost, options.deviceContainer, options.persistentId);
@@ -41,16 +45,16 @@
         }
 
         adPlayer = OO.Pulse.createAdPlayer(adContainerDiv, null, sharedElement);
-        //Hide the videojs spinner when ads are playing
+        // Hide the videojs spinner when ads are playing; hide poster, player if options.hidePoster is true
         (function(){
             var style = document.createElement('style');
             style.type = 'text/css';
-            style.innerHTML = '.vjs-ad-playing.vjs-ad-playing .vjs-loading-spinner{display:none}';
+            style.innerHTML = '.vjs-ad-playing.vjs-ad-playing .vjs-loading-spinner{display:none} .vjs-pulse-hideposter .vjs-poster, .vjs-pulse-hideposter .vjs-tech, .vjs-pulse-hideposter .vjs-dock-title { opacity: 0 }';
             document.getElementsByTagName('head')[0].appendChild(style);
         }());
 
         adPlayer.addEventListener(OO.Pulse.AdPlayer.Events.PAUSE_AD_SHOWN, function (event, metadata) {
-            // Make sure that the videojs control are  visible for pause ads
+            // Make sure that the videojs control are visible for pause ads
             vjsControls.el().style['z-index'] = 10000;
         });
 
@@ -71,7 +75,6 @@
             for (var i = 0; i < spinners.length; i++){
                 spinners[i].style.display = "none";
             }
-
         });
 
 
@@ -417,6 +420,8 @@
 
         //Content playback listener for videojs
         function contentPlayback(event){
+            player.removeClass('vjs-pulse-hideposter');
+
             if(sessionIsValid()) {
                 adPlayer.contentStarted();
             }

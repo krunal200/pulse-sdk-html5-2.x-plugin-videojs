@@ -28,7 +28,8 @@
         //Init videojs-contrib-ads plugin
         player.ads(options['contrib-ads-options']);
 
-        if(options.hidePoster) {
+        var queryParams = getQueryStringParams();
+        if(options.hidePoster || player.autoplay() || (queryParams.hasOwnProperty('autoplay') && queryParams.autoplay === undefined) || queryParams.autoplay === '1' || queryParams.autoplay === 'true') {
             player.addClass('vjs-pulse-hideposter');
         }
 
@@ -448,6 +449,36 @@
             player.off('fullscreenchange', onSizeChanged);
             player.off('volumechange', onVolumeChange);
             clearInterval(resizeHandle);
+        }
+
+        function getQueryStringParams() {
+            var params = {};
+            var ps = [];
+
+            try{
+                if(window){
+                    if(window.top && window.top.location){
+                        ps = window.top.location.search.split("&")
+                    } else {
+                        ps = window.location.search.split("&");
+                    }
+                }
+            } catch (e){
+                return ps;
+            }
+
+
+            if(ps && ps[0]){
+                ps[0] = ps[0].slice(1);
+            }
+
+            for (var i = 0; i < ps.length; i++) {
+                if (ps[i]) {
+                    var p = ps[i].split(/=/);
+                    params[p[0]] = p[1];
+                }
+            }
+            return params;
         }
 
         //Reset all the states to their original values

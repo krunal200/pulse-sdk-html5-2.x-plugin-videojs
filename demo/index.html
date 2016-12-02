@@ -26,8 +26,39 @@
     <script src="videojs-contrib-ads/videojs.ads.js"></script>
     <script src="../src/brightcove.pulse.js"></script>
     <script>
+        function getQueryStringParams() {
+            var params = {};
+            var ps = [];
+
+            try{
+                if(window){
+                    if(window.top && window.top.location){
+                        ps = window.top.location.search.split("&")
+                    } else {
+                        ps = window.location.search.split("&");
+                    }
+                }
+            } catch (e){
+                return ps;
+            }
+
+
+            if(ps && ps[0]){
+                ps[0] = ps[0].slice(1);
+            }
+
+            for (var i = 0; i < ps.length; i++) {
+                if (ps[i]) {
+                    var p = ps[i].split(/=/);
+                    params[p[0]] = p[1];
+                }
+            }
+            return params;
+        }
 
         function loadPlayers() {
+            var params = getQueryStringParams();
+
             var readyPlayers = videojs.getPlayers();
             for(var id in readyPlayers) {
                 var player = readyPlayers[id];
@@ -42,10 +73,11 @@
                         'contrib-ads-options': {
                             debug: true
                         },
-                        debug: true
+                        debug: true,
+                        hidePoster: player.autoplay() || params.hasOwnProperty('hideposter')
                     });
                 });
-            }3
+            }
         }
 
         document.addEventListener("DOMContentLoaded", loadPlayers);

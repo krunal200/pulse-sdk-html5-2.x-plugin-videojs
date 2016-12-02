@@ -28,8 +28,14 @@
         //Init videojs-contrib-ads plugin
         player.ads(options['contrib-ads-options']);
 
-        var queryParams = getQueryStringParams();
-        if(options.hidePoster || player.autoplay() || (queryParams.hasOwnProperty('autoplay') && queryParams.autoplay === undefined) || queryParams.autoplay === '1' || queryParams.autoplay === 'true') {
+        // Automatically hide poster if autoplay is enabled
+        // (autoplay will not work on the following mobile devices)
+        if(!videojs.browser.IS_IOS && !videojs.browser.IS_ANDROID) {
+            var queryParams = getQueryStringParams();
+            if(player.autoplay() || (queryParams.hasOwnProperty('autoplay') && queryParams.autoplay === undefined) || queryParams.autoplay === '1' || queryParams.autoplay === 'true') {
+                player.addClass('vjs-pulse-hideposter');
+            }
+        } else if(options.hidePoster) {
             player.addClass('vjs-pulse-hideposter');
         }
 

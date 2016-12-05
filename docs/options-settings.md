@@ -9,6 +9,7 @@ The plugin options object is a combination of Pulse global settings, Pulse metad
 * `persistentId` : &lt;string\> Ooyala Pulse persistent id; used for unique user tracking.
 * `metadata` : &lt;object> An object containing the session settings as described under [Session Settings](#session-settings). When integrating with the Brightcove Player, these settings are combined with the metadata set for each video item in Brightcove Studio.
 * `contrib-ads-options` : &lt;object> An object containing the parameters to pass to the videojs-contrib-ads plugin, see [videojs-contrib-ads](https://github.com/videojs/videojs-contrib-ads) for more information.
+* `hidePoster` : &lt;Boolean> If true, the video poster and title will be hidden until the first time the content plays, after prerolls. Useful if you have implemented your own autoplay solution.
 * `debug` : &lt;Boolean> If true, the plugin and Pulse SDK will output debug info to the console
 
 ## <a name="session-settings"></a>Session settings

@@ -10,7 +10,7 @@
         var adPlayer;
         var adContainerDiv;
         var isInLinearAdMode = false;
-        var sharedElement;
+        var sharedElement = null;
         var playerSrc;
         var postrollsPlaying = false;
         var prerollSlot = true;
@@ -45,13 +45,19 @@
         //Create the ad player
         createAdContainer();
 
+        var customBehaviours = { };
         if(isMobile()){
             sharedElement = getSharedElement();
-        } else {
-            sharedElement = null;
+            // Set the video element source with MIME-type included to avoid issues with other media sources
+            customBehaviours.setVideoSource = (function(mediaFile, element) {
+                player.src({
+                    src: mediaFile.url,
+                    type: mediaFile.mimeType
+                });
+            });
         }
 
-        adPlayer = OO.Pulse.createAdPlayer(adContainerDiv, null, sharedElement);
+        adPlayer = OO.Pulse.createAdPlayer(adContainerDiv, null, sharedElement, customBehaviours);
         // Hide the videojs spinner when ads are playing; hide poster, player if options.hidePoster is true
         (function(){
             var style = document.createElement('style');

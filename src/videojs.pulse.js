@@ -39,7 +39,7 @@
             player.addClass('vjs-pulse-hideposter');
         }
 
-        OO.Pulse.debug = options.debug || false;
+        OO.Pulse.debug = options.debug || OO.Pulse.debug;
         //Set the Pulse global settings
         OO.Pulse.setPulseHost(options.pulseHost, options.deviceContainer, options.persistentId);
         //Create the ad player

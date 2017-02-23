@@ -19,6 +19,7 @@
             var firstPlay = true;
             var playlistCurrentItem = 0;
             var pauseAdTimeout = null;
+            var isFree = false;
 
             if(!OO || !OO.Pulse) {
                 throw new Error('The Pulse SDK is not included in the page. Be sure to load it before the Brightcove player plugin.');
@@ -73,7 +74,7 @@
             });
 
             adPlayer.addEventListener(OO.Pulse.AdPlayer.Events.AD_CLICKED, function(event, eventData) {
-                if(adClickedCallback){
+                if(adClickedCallback) {
                     adClickedCallback(eventData);
                 } else if (eventData.url) {
                     // Default clickthrough behaviour
@@ -118,21 +119,21 @@
                 }
             };
 
-            player.on('play', function() {
+            player.on('play', function() {                
                 if(firstPlay) {
                     // workaround for desktop if the user clicks play before we get loadedmetadata
                     if(player.ads.state === 'ads-ready?') {
                         createSession();
                         player.trigger('play');
                     }
-                } else {
+                } else if(!isFree) {
                     delete vjsControls.el().style['z-index'];
                     adPlayer.contentStarted();
                 }
             });
 
             player.on('pause', function() {
-                if(!player.scrubbing() && player.ads.state === 'content-playback') {
+                if(!isFree && !player.scrubbing() && player.ads.state === 'content-playback') {
                     pauseAdTimeout = setTimeout(function() {
                         pauseAdTimeout = null;
                         adPlayer.contentPaused();
@@ -150,20 +151,16 @@
             //=====================================================================
 
             var PulseAPI = function(adPlayer) {
+                /**
+                 * Pulse ad player
+                 */
                 this.adPlayer = adPlayer;
+
+                /**
+                 * Pulse plugin version
+                 */
                 this.version = "@VERSION";
             }
-
-            /**
-             * Pulse ad player
-             */
-            // player.pulse.adPlayer = adPlayer;
-
-            /**
-             * Pulse plugin version
-             */
-
-            // player.pulse.version = "@VERSION";
 
             /**
              * Initialize a new session.
@@ -219,7 +216,7 @@
              */
             PulseAPI.prototype.stopSession = function() {
                 if(sessionIsValid()) {
-                    try{
+                    try {
                         adPlayer.stopSession();
                     } catch (e){
 
@@ -238,6 +235,7 @@
                 resetStates();
             };
 
+            // Make sure each player has its own public API instance
             player.pulse = new PulseAPI(adPlayer);
 
             function sessionIsValid() {
@@ -397,7 +395,14 @@
             }
 
             function readyForPreroll() {
-                if(sessionStarted) {
+                isFree = !!player.mediainfo && player.mediainfo.economics === 'FREE';
+                if(isFree) {
+                    firstPlay = false;
+                    OO.Pulse.Utils.log('Video is marked as not ad-supported; ad session will not be requested');
+                    return;
+                }
+
+                if(sessionStarted || isFree) {
                     return;
                 }
 
@@ -410,7 +415,7 @@
                 // Save the player content
                 playerSrc = player.currentSrc();
 
-                if(readyForPrerollCallback){
+                if(readyForPrerollCallback) {
                     readyForPrerollCallback();
                 } else {
                     // Init session with a combination of media and page level metadata
@@ -428,10 +433,14 @@
             }
 
             //Content ended listener for videojs
-            function contentEnded(){
+            function contentEnded() {
                 if(pauseAdTimeout) {
                     clearTimeout(pauseAdTimeout);
                     pauseAdTimeout = null;
+                }
+
+                if(isFree) {
+                    return;
                 }
 
                 postrollsPlaying = true;

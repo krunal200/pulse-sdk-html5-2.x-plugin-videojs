@@ -9,8 +9,6 @@
     <script src="//service.videoplaza.tv/proxy/pulse-sdk-html5/2.1/latest.min.js"></script>
     <!--Include the pulse SDK ad player skin if you need it.-->
     <script src="//service.videoplaza.tv/proxy/pulse-sdk-html5-skin/base.min.js"></script>
-
-
     <script src="videojs-contrib-ads/videojs.ads.js"></script>
     <script src="../src/videojs.pulse.js"></script>
 </head>
@@ -27,38 +25,24 @@
             </video>
         </div>
     </div>
-    <div id="player_container2">
-        <div id='container2' style='width:100%; height:100%;'>
-            <video id="vjsVideo2" class="video-js vjs-default-skin" controls preload="auto" width="640px" height="360px">
-                <source src="http://pulse-demo.cdn.videoplaza.tv/resources/media/sintel_trailer_854x480.mp4" type='video/mp4'>
-                <p class="vjs-no-js">
-                    To view this video please enable JavaScript, and consider upgrading to a web browser that
-                    <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-                </p>
-            </video>
-        </div>
-    </div>
 </div>
 </div>
 
 <script>
     function loadPlayer() {
-        ['vjsVideo', 'vjsVideo2'].forEach(function(item) {
-        var player = videojs(item);
-            player.pulse({
-                pulseHost : "http://pulse-demo.videoplaza.tv",
-                'contrib-ads-options': {
-                    debug: true
-                }
-            });
-
-            player.pulse.initSession({
-                tags : ["standard-linears"],
-                category: "skip-always",
-                linearPlaybackPositions: [ 5, 15 ]
-            });
+        var player = videojs('vjsVideo');
+        player.pulse({
+            pulseHost : "http://pulse-demo.videoplaza.tv",
+            'contrib-ads-options': {
+                debug: true
+            }
         });
 
+        player.pulse.initSession({
+            tags : ["standard-linears"],
+            category: "skip-always",
+            linearPlaybackPositions: [ 5, 15 ]
+        });
     }
 
     document.addEventListener("DOMContentLoaded", loadPlayer);

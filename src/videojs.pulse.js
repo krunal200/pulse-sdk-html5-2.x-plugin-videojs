@@ -564,7 +564,7 @@
              * @param sessionSettings
              * @returns {{height: *, width: *, maxBitRate: *, linearPlaybackPositions: *, nonlinearPlaybackPositions: *, insertionPointFilter: *, referrerUrl: *, linearSlotSize: *}}
              */
-            function getRequestSettingsFromSessionSettings(sessionSettings){
+            function getRequestSettingsFromSessionSettings(sessionSettings) {
                 var requestSettings = {
                     height: sessionSettings.height,
                     width: sessionSettings.width,
@@ -577,7 +577,10 @@
                     maxLinearBreakDuration: sessionSettings.maxLinearBreakDuration
                 };
 
-                //Remove the empty fields for the SDK
+                requestSettings.width = requestSettings.width || player.width();
+                requestSettings.height = requestSettings.height || player.height();
+
+                // Remove the empty fields for the SDK
                 cleanObject(requestSettings);
 
                 return requestSettings;

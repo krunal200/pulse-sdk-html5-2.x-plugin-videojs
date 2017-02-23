@@ -652,6 +652,7 @@ var defaults = {
 var contribAdsPlugin = function contribAdsPlugin(options) {
 
   var player = this; // eslint-disable-line consistent-this
+
   var settings = _video2.default.mergeOptions(defaults, options);
 
   // prefix all video element events during ad playback
@@ -818,7 +819,6 @@ var contribAdsPlugin = function contribAdsPlugin(options) {
     'ads-ready': {
       events: {
         play: function play() {
-          console.log('switching to state preroll? on ' + player.id());
           this.state = 'preroll?';
           (0, _cancelContentPlay2.default)(player);
         },
@@ -913,7 +913,6 @@ var contribAdsPlugin = function contribAdsPlugin(options) {
     },
     'ad-playback': {
       enter: function enter() {
-        console.log('ad-playback state entered on:', player.id());
         // capture current player state snapshot (playing, currentTime, src)
         if (!player.ads.shouldPlayContentBehindAd(player)) {
           this.snapshot = _snapshot2.default.getPlayerSnapshot(player);

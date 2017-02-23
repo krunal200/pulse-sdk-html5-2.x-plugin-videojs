@@ -67,7 +67,7 @@
                 document.getElementsByTagName('head')[0].appendChild(style);
             }());
 
-            adPlayer.addEventListener(OO.Pulse.AdPlayer.Events.PAUSE_AD_SHOWN, function (event, metadata) {
+            adPlayer.addEventListener(OO.Pulse.AdPlayer.Events.PAUSE_AD_SHOWN, function(event, metadata) {
                 // Make sure that the videojs control are visible for pause ads
                 vjsControls.el().style['z-index'] = 10000;
             });
@@ -82,13 +82,18 @@
                 }
             });
 
-            adPlayer.addEventListener(OO.Pulse.AdPlayer.Events.AD_BREAK_STARTED, function () {
+            adPlayer.addEventListener(OO.Pulse.AdPlayer.Events.AD_BREAK_STARTED, function() {
+                player.trigger('ads-pod-started');
                 player.trigger('playing');
-                //Hide the VJS loading spinner
+                // Hide the VJS loading spinner
                 var spinners = document.getElementsByClassName('vjs-loading-spinner');
-                for (var i = 0; i < spinners.length; i++){
+                for (var i = 0; i < spinners.length; i++) {
                     spinners[i].style.display = "none";
                 }
+            });
+
+            adPlayer.addEventListener(OO.Pulse.AdPlayer.Events.AD_BREAK_FINISHED, function() {
+                player.trigger('ads-pod-ended');
             });
 
             var createSession = function() {
@@ -126,7 +131,7 @@
                 }
             });
 
-            player.on('pause', function () {
+            player.on('pause', function() {
                 if(!player.scrubbing() && player.ads.state === 'content-playback') {
                     pauseAdTimeout = setTimeout(function() {
                         pauseAdTimeout = null;
@@ -185,7 +190,7 @@
              * True if in an ad break
              * @returns {boolean}
              */
-            PulseAPI.prototype.isInLinearAdMode = function () {
+            PulseAPI.prototype.isInLinearAdMode = function() {
                 return isInLinearAdMode;
             };
 
@@ -196,7 +201,7 @@
              * @param event event to listen to
              * @param callback callback function
              */
-            PulseAPI.prototype.addEventListener = function (event, callback) {
+            PulseAPI.prototype.addEventListener = function(event, callback) {
                 adPlayer.addEventListener(event, callback);
             };
 
@@ -205,14 +210,14 @@
              * @param event ad player event
              * @param callback callback to remove
              */
-            PulseAPI.prototype.removeEventListener = function (event, callback) {
+            PulseAPI.prototype.removeEventListener = function(event, callback) {
                 adPlayer.removeEventListener(event, callback);
             };
 
             /**
              * Stop the ad session. No more ads will be displayed in the video.
              */
-            PulseAPI.prototype.stopSession = function () {
+            PulseAPI.prototype.stopSession = function() {
                 if(sessionIsValid()) {
                     try{
                         adPlayer.stopSession();
@@ -228,7 +233,7 @@
              * used to display other content where you no longer need the Brightcove player and the
              * player is removed from the page.
              */
-            PulseAPI.prototype.destroy = function () {
+            PulseAPI.prototype.destroy = function() {
                 this.stopSession();
                 resetStates();
             };

@@ -9,13 +9,9 @@
     <script src="//service.videoplaza.tv/proxy/pulse-sdk-html5/2.1/latest.min.js"></script>
     <!--Include the pulse SDK ad player skin if you need it.-->
     <script src="//service.videoplaza.tv/proxy/pulse-sdk-html5-skin/base.min.js"></script>
-
-
     <script src="videojs-contrib-ads/videojs.ads.js"></script>
-    <script src="../src/brightcove.pulse.js"></script>
-
+    <script src="../src/videojs.pulse.js"></script>
 </head>
-
 <body>
 <div id="main">
     <div id="player_container">
@@ -33,11 +29,10 @@
 </div>
 
 <script>
-    function loadPlayer(){
+    function loadPlayer() {
         var player = videojs('vjsVideo');
         player.pulse({
             pulseHost : "http://pulse-demo.videoplaza.tv",
-            playerId: 'vjsVideo',
             'contrib-ads-options': {
                 debug: true
             }
@@ -46,9 +41,8 @@
         player.pulse.initSession({
             tags : ["standard-linears"],
             category: "skip-always",
-            linearPlaybackPositions : [5,15]
+            linearPlaybackPositions: [ 5, 15 ]
         });
-
     }
 
     document.addEventListener("DOMContentLoaded", loadPlayer);

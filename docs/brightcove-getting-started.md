@@ -42,7 +42,6 @@ The plugin is automatically initiated when your player loads. No additional code
 2. Create a script on the page that listens for the player `ready` event and initialize the plugin there:
   ```
   function loadPlayers() {
-    // Note that this has not been tested with multiple players
     var readyPlayers = videojs.getPlayers();
     for(var id in readyPlayers) {
       var player = readyPlayers[id];

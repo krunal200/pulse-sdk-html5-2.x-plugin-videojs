@@ -1,6 +1,21 @@
 (function(vjs) {
     'use strict';
 
+    function log() {
+        var args = Array.prototype.slice.call(arguments);
+        if(OO.Pulse) {
+            if(OO.Pulse.Utils.logTagged) {
+                args.unshift([{ tag: 'vjs', color: '#407A5C' }]);
+                OO.Pulse.Utils.logTagged.apply(null, args);
+            } else {
+                OO.Pulse.Utils.log.apply(null, args);
+            }
+        } else {
+            args.unshift('OO.Pulse: ');
+            console.log.apply(window.console, args);
+        }
+    }
+
     var pulsePlugin = function(options, readyForPrerollCallback, adClickedCallback) {
         (function(player) {
             var session = null;
@@ -22,16 +37,15 @@
             var isFree = false;
 
             if(!OO || !OO.Pulse) {
-                throw new Error('The Pulse SDK is not included in the page. Be sure to load it before the Brightcove player plugin.');
+                throw new Error('The Pulse SDK is not included in the page. Be sure to load it before the Pulse plugin for videojs.');
             }
 
             //Init videojs-contrib-ads plugin
             player.ads(options['contrib-ads-options']);
-
+            var queryParams = getQueryStringParams();
             // Automatically hide poster if autoplay is enabled
             // (autoplay will not work on the following mobile devices)
             if(!videojs.browser.IS_IOS && !videojs.browser.IS_ANDROID) {
-                var queryParams = getQueryStringParams();
                 if(player.autoplay() || (queryParams.hasOwnProperty('autoplay') && queryParams.autoplay === undefined) || queryParams.autoplay === '1' || queryParams.autoplay === 'true') {
                     player.addClass('vjs-pulse-hideposter');
                 }
@@ -46,7 +60,18 @@
             createAdContainer();
 
             var customBehaviours = { };
-            if(isMobile()) {
+            var forceSharedElement = queryParams.hasOwnProperty('pulse_force_shared');
+            var useShared = false;
+
+            if(forceSharedElement) {
+                useShared = true;
+                log('Using shared element because pulse_force_shared parameter is present');
+            } else if(isMobile()) {
+                useShared = true;
+                log('Using shared element because a mobile browser was detected');
+            }
+
+            if(useShared) {
                 sharedElement = getSharedElement();
                 // Set the video element source with MIME-type included to avoid issues with other media sources
                 customBehaviours.setVideoSource = (function(mediaFile, element) {
@@ -390,7 +415,7 @@
             }
 
             // Get the HTML5 video element
-            function getSharedElement(){
+            function getSharedElement() {
                 return document.getElementById(player.id() + '_html5_api');
             }
 
@@ -398,7 +423,7 @@
                 isFree = !!player.mediainfo && player.mediainfo.economics === 'FREE';
                 if(isFree) {
                     firstPlay = false;
-                    OO.Pulse.Utils.log('Video is marked as not ad-supported; ad session will not be requested');
+                    log('Video is marked as not ad-supported; ad session will not be requested');
                     return;
                 }
 
@@ -656,7 +681,7 @@
 
                     player.ads.endLinearAdMode();
                     if(!postrollsPlaying) {
-                        OO.Pulse.Utils.log('=> ending linear ad mode with state ' + player.ads.state);
+                        log('Playing; ending linear ad mode with state ' + player.ads.state);
                         isInLinearAdMode = false;
                     }
 
@@ -669,7 +694,7 @@
                     player.pause();
                     vjsControls.hide();
 
-                    OO.Pulse.Utils.log('=> (pause) starting linear ad mode with state ' + player.ads.state);
+                    log('Paused; starting linear ad mode with state ' + player.ads.state);
                     player.ads.startLinearAdMode();
 
                     setPointerEventsForClick();
@@ -683,7 +708,7 @@
                 },
                 sessionEnded: function(){
                     // Do not exit linear ad mode on mobile after postrolls or the content will restart
-                    OO.Pulse.Utils.log('=> session ended; ending linear ad mode with state ' + player.ads.state);
+                    log('Session ended; ending linear ad mode with state ' + player.ads.state);
                     player.ads.endLinearAdMode();
                     if(!sharedElement){
                     } else {

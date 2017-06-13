@@ -192,8 +192,8 @@
              * @param sessionSettings
              * @returns {*}
              */
-            PulseAPI.prototype.initSession = function(sessionSettings){
-                //resetPlugin();
+            PulseAPI.prototype.initSession = function(sessionSettings) {
+                resetPlugin();
                 pageMetadata = sessionSettings;
 
                 return session;

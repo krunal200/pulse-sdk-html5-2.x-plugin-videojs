@@ -18,9 +18,7 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         clean: {
-            skin: {
-                src: ['dist/']
-            }
+            src: ['dist/']
         },
         concat: {
             pulse: {
@@ -55,5 +53,5 @@ module.exports = function(grunt) {
         },
     });
 
-    grunt.registerTask('default', [ 'concat', 'uglify',]);
+    grunt.registerTask('default', [ 'clean', 'concat', 'uglify',]);
 };

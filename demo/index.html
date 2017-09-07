@@ -2,28 +2,28 @@
 <html>
 <head>
     <title>Ooyala Pulse plugin for videojs/Brightcove demo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-ads/5.0.4-0/videojs-contrib-ads.min.css">
 </head>
 
 <body>
 <div id="main">
+    <!-- Brightcove player and playlist div -->
     <video
-            data-playlist-id="4901749008001"
-            data-account="3110396001"
-            data-player="HJcaydem"
-            data-embed="default"
-            class="video-js"
-            controls
-            style="width: 1280px; height: 720px;">
+        data-account="3110396001" 
+        data-player="ryoaUBpYZ" 
+        data-playlist-id="4901749008001"
+        data-embed="default" 
+        data-application-id 
+        class="video-js" 
+        controls 
+        style="width: 1280px; height: 720px;">
     </video>
-    <ol class="vjs-playlist"></ol>
-    <!--Include the pulse SDK-->
-    <script src="//service.videoplaza.tv/proxy/pulse-sdk-html5/2.1/latest.min.js"></script>
-    <!--Include the pulse SDK ad player skin if you need it.-->
-    <script src="//service.videoplaza.tv/proxy/pulse-sdk-html5-skin/base.min.js"></script>
-    <!--Include here the brightcove player.-->
-    <script src="//players.brightcove.net/3110396001/HJcaydem_default/index.js"></script>
-    <!--Include your plugins here. This step can be skipped if you already included the plugin directly in your Brightcove player in brightcove studio.-->
-    <script src="videojs-contrib-ads/videojs.ads.js"></script>
+    <ol class="vjs-playlist" style="width: 400px"></ol>
+    <!-- Scripts: Pulse SDK, Ad Player skin, Brightcove player source, videojs-contrib-ads, this plugin -->
+    <script src="https://service.videoplaza.tv/proxy/pulse-sdk-html5/2.1/latest.min.js"></script>
+    <script src="https://service.videoplaza.tv/proxy/pulse-sdk-html5-skin/base.min.js"></script>
+    <script src="https://players.brightcove.net/3110396001/ryoaUBpYZ_default/index.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-ads/5.0.4-0/videojs-contrib-ads.min.js"></script>
     <script src="../src/videojs.pulse.js"></script>
     <script>
         function getQueryStringParams() {

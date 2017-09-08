@@ -11,10 +11,10 @@ To get started with the integration and configure your Pulse hostname and additi
 1. In the next page, find the Plugins section and click Edit.
 
 1. In the next page, click _JavaScript_ and include the following source files in addition to your Brightcove embed code:
-  - https://service.videoplaza.tv/proxy/pulse-sdk-html5/2.1/latest.min.js - _The Pulse SDK_
-  - https://service.videoplaza.tv/proxy/pulse-sdk-html5-skin/base.min.js - _The Pulse SDK AdPlayer skin (if desired)_
-  - https://service.videoplaza.tv/proxy/pulse-sdk-html5-bridges/videojs/2/latest.min.js - _The Pulse plugin for the Brightcove video player_
-  - videojs.ads.js - _The videojs ad manager plugin, available on [GitHub](https://github.com/videojs/videojs-contrib-ads)_, which you need to host yourself (Our plugin v2 should be used with contrib-ads v4.x).
+  - https://service.videoplaza.tv/proxy/pulse-sdk-html5/2.1/latest.min.js - The Pulse SDK.
+  - https://service.videoplaza.tv/proxy/pulse-sdk-html5-skin/base.min.js - The Pulse SDK AdPlayer skin (if desired).
+  - https://service.videoplaza.tv/proxy/pulse-sdk-html5-bridges/videojs/2/latest.min.js - The Pulse plugin for the Brightcove video player.
+  - videojs-contrib-ads - The videojs ad manager plugin, available on [GitHub](https://github.com/videojs/videojs-contrib-ads), which you need to host yourself, or serve [from a CDN](https://cdnjs.com/libraries/videojs-contrib-ads).
 
   **https** may be substituted for **http** if required, or omitted (like `//url.to.file`) to automatically use the protocol of the current site.
 
@@ -65,14 +65,14 @@ The plugin is automatically initiated when your player loads. No additional code
 
 On your video items in Brightcove Studio, the following custom metadata is read by the Pulse plugin if available:
 
-| Name       	| Legacy name 	| Sample input                     	| Description                      	|
-|------------	|-------------	|----------------------------------	|----------------------------------	|
-| pulse_tags    | vpTags       	| sports,soccer,europe            	| Matched against tag targeting rules set up in Pulse; comma separated.  	|
-| pulse_flags	| vpFlags      	| noprerolls,nocom*                   	| Prevents certain ad types from being served; comma separated.|
-| pulse_max_linear_break_duration	| none      	| 15                	| Maximum linear ad break duration in seconds.|
-| pulse_category| vpCategory   	| sports                         	| Selects alternate ad insertion policies configured in Pulse.	|
-| pulse_content_partner| vpContentPartner|                          |                                  	|
-| pulse_content_form| vpContentForm	| shortForm _or_ longForm               | Selects ad insertion policies configured in Pulse for short/long form content.	|
+| Name        | Legacy name   | Sample input                      | Description                       |
+|------------ |-------------  |---------------------------------- |---------------------------------- |
+| pulse_tags    | vpTags        | sports,soccer,europe              | Matched against tag targeting rules set up in Pulse; comma separated.   |
+| pulse_flags | vpFlags       | noprerolls,nocom*                     | Prevents certain ad types from being served; comma separated.|
+| pulse_max_linear_break_duration | none        | 15                  | Maximum linear ad break duration in seconds.|
+| pulse_category| vpCategory    | sports                          | Selects alternate ad insertion policies configured in Pulse.  |
+| pulse_content_partner| vpContentPartner|                          |                                   |
+| pulse_content_form| vpContentForm | shortForm _or_ longForm               | Selects ad insertion policies configured in Pulse for short/long form content.  |
 
 :bulb: Additionally, cue points of type _ad_, with a name of either `vpspot` or `pulse_spot` are used to trigger midroll ads, and tags provided under the _Video Information_ section in Brightcove Studio are merged with values from `pulse_tags` metadata set on the individual video items.
 

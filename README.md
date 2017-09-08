@@ -29,7 +29,6 @@ Information about further customizations you can make to the integration can be 
 |                | Pulse plugin v1 | Pulse plugin v2 |
 |----------------|:---------------:|:---------------:|
 | contrib-ads v3 |        x        |                 |
-| contrib-ads v4 |                 |        x        |
 | contrib-ads v5 |                 |        x        |
 
 ## API Docs

@@ -569,7 +569,7 @@
                 }
 
                 // Old behaviour
-                return isMobile();
+                return !isMobile();
             }
 
             /**

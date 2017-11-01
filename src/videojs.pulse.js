@@ -35,6 +35,7 @@
             var playlistCurrentItem = 0;
             var pauseAdTimeout = null;
             var isFree = false;
+            var disabledCues = [ ];
 
             if(!OO || !OO.Pulse) {
                 throw new Error('The Pulse SDK is not included in the page. Be sure to load it before the Pulse plugin for videojs.');
@@ -121,6 +122,48 @@
             adPlayer.addEventListener(OO.Pulse.AdPlayer.Events.AD_BREAK_FINISHED, function() {
                 player.trigger('ads-pod-ended');
             });
+
+            adPlayer.addEventListener(OO.Pulse.AdPlayer.Events.LINEAR_AD_STARTED, function() {
+                // Disable captions
+                hideCues();
+            });
+
+            function showCues() {
+                if(!sharedElement) {
+                    return;
+                }
+
+                var enabledCues = 0;
+                for(var i = 0; i < disabledCues.length; ++i) {
+                    disabledCues[i].mode = 'showing';
+                    ++enabledCues;
+                }
+
+                disabledCues = [ ];
+                if(enabledCues > 0) {
+                    log(enabledCues + ' caption tracks enabled after ad playback');
+                }
+            }
+
+            function hideCues() {
+                if(!sharedElement) {
+                    return;
+                }
+
+                showCues();
+                
+                for(var i = 0; i < player.textTracks().length; ++i) {
+                    var track = sharedElement.textTracks[i];
+                    if(track.mode === 'showing') {
+                        track.mode = 'disabled';
+                        disabledCues.push(track);
+                    }
+                }
+
+                if(disabledCues.length > 0) {
+                    log(disabledCues.length + ' caption tracks disabled during ad playback');
+                }
+            }
 
             var createSession = function() {
                 if(session === null) {
@@ -681,7 +724,8 @@
             //Ad player listener interface for the ad player
             var adPlayerListener = {
                 startContentPlayback : function(){
-                    if(sharedElement){
+                    showCues();
+                    if(sharedElement) {
                         sharedElement.style.display = 'block'; // Make sure the shared element is visible
                     }
                     firstPlay = false;

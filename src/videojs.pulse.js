@@ -35,6 +35,7 @@
             var playlistCurrentItem = 0;
             var pauseAdTimeout = null;
             var isFree = false;
+            var contentUpdated = false;
 
             if(!OO || !OO.Pulse) {
                 throw new Error('The Pulse SDK is not included in the page. Be sure to load it before the Pulse plugin for videojs.');
@@ -140,6 +141,10 @@
                     //The video was changed, we need to stop the previous session
                     resetPlugin();
                     playlistCurrentItem = player.playlist.currentItem();
+                    createSession();
+                }else if (contentUpdated){
+                    contentUpdated = false;
+                    resetPlugin();
                     createSession();
                 }
             };
@@ -450,6 +455,11 @@
 
             }
 
+            function contentupdate() {
+                contentUpdated = true;
+                createSession();
+            }
+
             //Time update callback for videojs
             function timeUpdate(){
                 if(sessionIsValid()) {
@@ -485,6 +495,7 @@
             //Register the relevant event listeners
             function registerPlayerEventListeners(){
                 player.on('readyforpreroll',readyForPreroll);
+                player.on('contentupdate',contentupdate);
                 player.on('timeupdate', timeUpdate);
                 player.on('contentended', contentEnded);
                 player.on('playing', contentPlayback);
@@ -497,6 +508,7 @@
 
             function unregisterPlayerEventListeners(){
                 player.off('readyforpreroll', readyForPreroll);
+                player.off('contentupdate',contentupdate);
                 player.off('timeupdate', timeUpdate);
                 player.off('contentended', contentEnded);
                 player.off('contentplayback', contentPlayback);

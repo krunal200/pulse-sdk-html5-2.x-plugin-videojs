@@ -154,9 +154,11 @@
                 
                 for(var i = 0; i < player.textTracks().length; ++i) {
                     var track = sharedElement.textTracks[i];
-                    if(track.mode === 'showing') {
-                        track.mode = 'disabled';
-                        disabledCues.push(track);
+                    if (track && "mode" in track) {
+                        if(track.mode === 'showing') {
+                            track.mode = 'disabled';
+                            disabledCues.push(track);
+                        }
                     }
                 }
 

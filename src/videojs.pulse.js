@@ -35,6 +35,7 @@
             var playlistCurrentItem = 0;
             var pauseAdTimeout = null;
             var isFree = false;
+            var readyforprerollFired = false;
             var contentUpdated = false;
 
             if(!OO || !OO.Pulse) {
@@ -142,7 +143,7 @@
                     resetPlugin();
                     playlistCurrentItem = player.playlist.currentItem();
                     createSession();
-                }else if (contentUpdated){
+                } else if(contentUpdated) {
                     contentUpdated = false;
                     resetPlugin();
                     createSession();
@@ -200,7 +201,6 @@
             PulseAPI.prototype.initSession = function(sessionSettings) {
                 resetPlugin();
                 pageMetadata = sessionSettings;
-
                 return session;
             };
 
@@ -212,6 +212,14 @@
                 adPlayer.startSession(userSession, adPlayerListener);
                 sessionStarted = true;
             };
+
+            /**
+             * Set the metadata used for ad requests
+             * @param sessionSettings
+             */
+            PulseAPI.prototype.setMetadata = function(sessionSettings) {
+                pageMetadata = sessionSettings;
+            }
 
             /**
              * True if in an ad break
@@ -425,6 +433,8 @@
             }
 
             function readyForPreroll() {
+                readyforprerollFired = true;
+
                 isFree = !!player.mediainfo && player.mediainfo.economics === 'FREE';
                 if(isFree) {
                     firstPlay = false;
@@ -455,7 +465,12 @@
 
             }
 
-            function contentupdate() {
+            function contentUpdate() {
+                if(!readyforprerollFired) {
+                    // src() called without an initial play first
+                    return;
+                }
+
                 contentUpdated = true;
                 createSession();
             }
@@ -494,8 +509,8 @@
 
             //Register the relevant event listeners
             function registerPlayerEventListeners(){
-                player.on('readyforpreroll',readyForPreroll);
-                player.on('contentupdate',contentupdate);
+                player.on('readyforpreroll', readyForPreroll);
+                player.on('contentupdate', contentUpdate);
                 player.on('timeupdate', timeUpdate);
                 player.on('contentended', contentEnded);
                 player.on('playing', contentPlayback);
@@ -508,7 +523,7 @@
 
             function unregisterPlayerEventListeners(){
                 player.off('readyforpreroll', readyForPreroll);
-                player.off('contentupdate',contentupdate);
+                player.off('contentupdate',contentUpdate);
                 player.off('timeupdate', timeUpdate);
                 player.off('contentended', contentEnded);
                 player.off('contentplayback', contentPlayback);

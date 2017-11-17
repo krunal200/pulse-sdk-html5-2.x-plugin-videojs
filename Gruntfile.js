@@ -7,12 +7,22 @@ module.exports = function(grunt) {
         '* email: info@ooyala.com \n'                                                       +
         '*/ \n';
 
+    var sourceFiles = [
+        'src/first.js',
+        'src/ad-player-init.js',
+        'src/pulse-api.js',
+        'src/pulse-utils.js',
+        'src/ad-player-listner.js',
+        'src/last.js'
+    ];
+
     // Load the plugin tasks we need
     [
         "grunt-contrib-uglify",
         "grunt-contrib-clean",
         "grunt-contrib-copy",
         "grunt-contrib-concat",
+        "grunt-contrib-watch",
     ].forEach(grunt.loadNpmTasks);
 
     grunt.initConfig({
@@ -33,24 +43,33 @@ module.exports = function(grunt) {
                     },
                     banner: sourceBanner
                 },
-                src: 'src/*.js',
-                dest: 'dist/<%= pkg.name %>-<%= pkg.version %>.js'
+                src: sourceFiles,
+                dest: 'dist/<%= pkg.name %>.js'
             }
         },
         //Minify
         uglify: {
             bridge: {
                 options: {
-                    //banner: sourceBanner,
+                    banner: sourceBanner,
                     mangle: {
                         except: ['error', 'format', 'request', 'model', 'parse', 'core', 'window', 'document', 'console']
                     }
                 },
                 files: {
-                    'dist/<%= pkg.name %>-<%= pkg.version %>.min.js': ['dist/<%= pkg.name %>-<%= pkg.version %>.js' ]
+                    'dist/<%= pkg.name %>.min.js': ['dist/<%= pkg.name %>.js' ]
                 }
             },
         },
+        watch: {
+            scripts: {
+                files: sourceFiles,
+                tasks: ['concat', 'uglify'],
+                options: {
+                    spawn: false
+                }
+            }
+        }
     });
 
     grunt.registerTask('default', [ 'clean', 'concat', 'uglify',]);

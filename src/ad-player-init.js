@@ -155,18 +155,3 @@ player.on('pause', function() {
 player.on('loadedmetadata', function() {
     createSession();
 });
-
-player.on('seeked', function() {
-    console.log('seeked', arguments);
-});
-
-
-player.on('seeking', function() {
-    console.log('seeking', arguments);
-});
-
-player.getChild('ControlBar').getChild('ProgressControl').getChild('SeekBar').on('mouseup', function() {
-    console.log('seek mouse up', arguments);
-})
-
-// a.getChild('ControlBar').getChild('ProgressControl').getChild('SeekBar').handleMouseUp

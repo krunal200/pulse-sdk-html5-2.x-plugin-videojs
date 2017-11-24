@@ -229,6 +229,19 @@ function contentPlayback(event){
     }
 }
 
+function showLinearAd (time) {
+    var cuePoint = pageMetadata
+    .linearPlaybackPositions
+    .filter( function (pos) {
+        return pos === time;   
+    });
+    if(cuePoint.length === 0 || !sessionIsValid()) {
+        return;
+    }
+    player.pause();
+    adPlayer.contentPositionChanged(time);
+}
+
 //Register the relevant event listeners
 function registerPlayerEventListeners(){
     player.on('readyforpreroll', readyForPreroll);

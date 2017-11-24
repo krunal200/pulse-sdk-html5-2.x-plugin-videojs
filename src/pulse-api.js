@@ -26,6 +26,16 @@ PulseAPI.prototype.initSession = function(sessionSettings) {
 };
 
 /**
+ * Show linear ad registered to display at 'time' ms in linearPlaybackPositions array.
+ * Useful to show ad if video playback position is changed as a result of some user interactions (eg: seeking)
+ * @param  {number} time Time in milli second
+ */
+PulseAPI.prototype.showLinearAd = function(time) {
+    showLinearAd(time);
+};
+
+
+/**
  * Start a pulse session
  * @param userSession
  */

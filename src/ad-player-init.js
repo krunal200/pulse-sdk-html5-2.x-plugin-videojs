@@ -63,9 +63,9 @@ if(useShared) {
         });
     });
 }
+options.uiOptions = typeof options.uiOptions !== 'undefined' ? options.uiOptions : null;
 
-
-adPlayer = OO.Pulse.createAdPlayer(adContainerDiv, null, sharedElement, customBehaviours);
+adPlayer = OO.Pulse.createAdPlayer(adContainerDiv, options.uiOptions, sharedElement, customBehaviours);
 
 // Hide the videojs spinner when ads are playing; hide poster, player if options.hidePoster is true
 (function(){

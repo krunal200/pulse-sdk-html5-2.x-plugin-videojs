@@ -200,8 +200,27 @@ function contentUpdate() {
 //Time update callback for videojs
 function timeUpdate(){
     if(sessionIsValid()) {
-        adPlayer.contentPositionChanged(player.currentTime());
+        updateContentPosition(player.currentTime());
     }
+}
+
+//Fake content position to show ad configured at 'time'ms
+function showLinearAd (time) {
+    var cuePoint = pageMetadata
+    .linearPlaybackPositions
+    .filter( function (pos) {
+        return pos === time;   
+    });
+    if(cuePoint.length === 0 || !sessionIsValid()) {
+        return;
+    }
+    player.pause();
+    updateContentPosition(time)
+}
+
+function updateContentPosition(time) {
+    latestContentPosition = time;
+    adPlayer.contentPositionChanged(time);
 }
 
 //Content ended listener for videojs
@@ -227,19 +246,6 @@ function contentPlayback(event){
     if(sessionIsValid()) {
         adPlayer.contentStarted();
     }
-}
-
-function showLinearAd (time) {
-    var cuePoint = pageMetadata
-    .linearPlaybackPositions
-    .filter( function (pos) {
-        return pos === time;   
-    });
-    if(cuePoint.length === 0 || !sessionIsValid()) {
-        return;
-    }
-    player.pause();
-    adPlayer.contentPositionChanged(time);
 }
 
 //Register the relevant event listeners

@@ -17,6 +17,7 @@ var pauseAdTimeout = null;
 var isFree = false;
 var readyforprerollFired = false;
 var contentUpdated = false;
+var latestContentPosition;
 
 if(!OO || !OO.Pulse) {
     throw new Error('The Pulse SDK is not included in the page. Be sure to load it before the Pulse plugin for videojs.');

@@ -34,6 +34,9 @@ PulseAPI.prototype.showLinearAd = function(time) {
     showLinearAd(time);
 };
 
+PulseAPI.prototype.getLatestContentPosition = function() {
+    return latestContentPosition;
+};
 
 /**
  * Start a pulse session
